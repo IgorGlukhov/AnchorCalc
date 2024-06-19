@@ -1,0 +1,60 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.35004.147
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnchorCalc", "AnchorCalc\AnchorCalc.csproj", "{4EF39E3B-F5EE-4933-B469-CD1F7A17549D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnchorCalc.Bootstrapper", "AnchorCalc.Bootstrapper\AnchorCalc.Bootstrapper.csproj", "{D505C8ED-4746-4CCD-A07E-958BB5F7019E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnchorCalc.Views", "AnchorCalc.Views\AnchorCalc.Views.csproj", "{A4420AD8-E59A-4EF0-8C19-2211955DB870}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnchorCalc.ViewModels", "AnchorCalc.ViewModels\AnchorCalc.ViewModels.csproj", "{7423468D-394F-4C68-A36A-1332BD1F7A93}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnchorCalc.Domain", "AnchorCalc.Domain\AnchorCalc.Domain.csproj", "{EE898415-5755-4715-9017-1E90C0BA76D4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnchorCalc.Infrastructure", "AnchorCalc.Infrastructure\AnchorCalc.Infrastructure.csproj", "{BA9ED95F-4F34-4FCC-9612-B315C69CE803}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6897BE4D-3B7C-4C5A-94DC-3F7A810D5F18}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4EF39E3B-F5EE-4933-B469-CD1F7A17549D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4EF39E3B-F5EE-4933-B469-CD1F7A17549D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4EF39E3B-F5EE-4933-B469-CD1F7A17549D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4EF39E3B-F5EE-4933-B469-CD1F7A17549D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D505C8ED-4746-4CCD-A07E-958BB5F7019E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D505C8ED-4746-4CCD-A07E-958BB5F7019E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D505C8ED-4746-4CCD-A07E-958BB5F7019E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D505C8ED-4746-4CCD-A07E-958BB5F7019E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4420AD8-E59A-4EF0-8C19-2211955DB870}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4420AD8-E59A-4EF0-8C19-2211955DB870}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4420AD8-E59A-4EF0-8C19-2211955DB870}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4420AD8-E59A-4EF0-8C19-2211955DB870}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7423468D-394F-4C68-A36A-1332BD1F7A93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7423468D-394F-4C68-A36A-1332BD1F7A93}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7423468D-394F-4C68-A36A-1332BD1F7A93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7423468D-394F-4C68-A36A-1332BD1F7A93}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE898415-5755-4715-9017-1E90C0BA76D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE898415-5755-4715-9017-1E90C0BA76D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE898415-5755-4715-9017-1E90C0BA76D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE898415-5755-4715-9017-1E90C0BA76D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA9ED95F-4F34-4FCC-9612-B315C69CE803}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA9ED95F-4F34-4FCC-9612-B315C69CE803}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA9ED95F-4F34-4FCC-9612-B315C69CE803}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA9ED95F-4F34-4FCC-9612-B315C69CE803}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E9D05CEB-9C3D-45D3-8ED9-E0654EB881B9}
+	EndGlobalSection
+EndGlobal
