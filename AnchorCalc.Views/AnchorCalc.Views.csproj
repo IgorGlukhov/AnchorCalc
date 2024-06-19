@@ -15,4 +15,8 @@
     <ProjectReference Include="..\AnchorCalc.ViewModels\AnchorCalc.ViewModels.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Converters\" />
+  </ItemGroup>
+
 </Project>
