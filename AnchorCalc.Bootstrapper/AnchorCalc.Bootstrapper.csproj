@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Autofac" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\AnchorCalc.Domain\AnchorCalc.Domain.csproj" />
     <ProjectReference Include="..\AnchorCalc.Infrastructure\AnchorCalc.Infrastructure.csproj" />
     <ProjectReference Include="..\AnchorCalc.ViewModels\AnchorCalc.ViewModels.csproj" />
