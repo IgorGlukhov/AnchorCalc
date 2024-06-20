@@ -5,9 +5,9 @@ namespace AnchorCalc.Infrastructure.Settings;
 
 internal class MainWindowMementoWrapper : IMainWindowMementoWrapperInitializer, IMainWindowMementoWrapper, IDisposable
 {
-    private MainWindowMemento _mainWindowMemento;
+    private MainWindowMemento? _mainWindowMemento;
     private bool _initialized;
-    private string _settingsFilePath;
+    private string? _settingsFilePath;
 
     public MainWindowMementoWrapper()
     {
@@ -16,7 +16,7 @@ internal class MainWindowMementoWrapper : IMainWindowMementoWrapperInitializer, 
 
     public void Dispose()
     {
-        EnsureInitilized();
+        EnsureInitialized();
         var serializedMemento=JsonConvert.SerializeObject(_mainWindowMemento);
         File.WriteAllText(_settingsFilePath,serializedMemento);
     }
@@ -25,12 +25,12 @@ internal class MainWindowMementoWrapper : IMainWindowMementoWrapperInitializer, 
     {
         get
         {
-            EnsureInitilized();
+            EnsureInitialized();
             return _mainWindowMemento.Left;
         }
         set
         {
-            EnsureInitilized();
+            EnsureInitialized();
             _mainWindowMemento.Left = value;
         }
     }
@@ -39,12 +39,12 @@ internal class MainWindowMementoWrapper : IMainWindowMementoWrapperInitializer, 
     {
         get
         {
-            EnsureInitilized();
+            EnsureInitialized();
             return _mainWindowMemento.Top;
         }
         set
         {
-            EnsureInitilized();
+            EnsureInitialized();
             _mainWindowMemento.Top = value;
         }
     }
@@ -53,12 +53,12 @@ internal class MainWindowMementoWrapper : IMainWindowMementoWrapperInitializer, 
     {
         get
         {
-            EnsureInitilized();
+            EnsureInitialized();
             return _mainWindowMemento.Width;
         }
         set
         {
-            EnsureInitilized();
+            EnsureInitialized();
             _mainWindowMemento.Width = value;
         }
     }
@@ -67,12 +67,12 @@ internal class MainWindowMementoWrapper : IMainWindowMementoWrapperInitializer, 
     {
         get
         {
-            EnsureInitilized();
+            EnsureInitialized();
             return _mainWindowMemento.Height;
         }
         set
         {
-            EnsureInitilized();
+            EnsureInitialized();
             _mainWindowMemento.Height = value;
         }
     }
@@ -81,12 +81,12 @@ internal class MainWindowMementoWrapper : IMainWindowMementoWrapperInitializer, 
     {
         get
         {
-            EnsureInitilized();
+            EnsureInitialized();
             return _mainWindowMemento.IsMaximized;
         }
         set
         {
-            EnsureInitilized();
+            EnsureInitialized();
             _mainWindowMemento.IsMaximized = value;
         }
     }
@@ -109,7 +109,7 @@ internal class MainWindowMementoWrapper : IMainWindowMementoWrapperInitializer, 
         _mainWindowMemento=JsonConvert.DeserializeObject<MainWindowMemento>(serializedMemento);
     }
 
-    private void EnsureInitilized()
+    private void EnsureInitialized()
     {
         if (!_initialized)
             throw new InvalidOperationException($"{nameof(IMainWindowMementoWrapper)} is not initialized");

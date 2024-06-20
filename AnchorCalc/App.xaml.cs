@@ -1,11 +1,12 @@
 ﻿using System.Windows;
+using System.Windows.Threading;
+using AnchorCalc.Bootstrapper;
 
 namespace AnchorCalc
 {
     public partial class App
     {
         private Bootstrapper.Bootstrapper? _bootstrapper;
-
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
@@ -14,7 +15,7 @@ namespace AnchorCalc
         }
         protected override void OnExit(ExitEventArgs e)
         {
-            _bootstrapper.Dispose();
+            if (_bootstrapper != null) _bootstrapper.Dispose();
             base.OnExit(e);
         }
     }

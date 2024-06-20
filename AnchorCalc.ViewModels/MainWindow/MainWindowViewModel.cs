@@ -1,14 +1,23 @@
-﻿using AnchorCalc.Domain.Settings;
+﻿using System.Windows.Input;
+using AnchorCalc.Domain.Settings;
+using AnchorCalc.ViewModels.Commands;
+using AnchorCalc.ViewModels.Windows;
 
 namespace AnchorCalc.ViewModels.MainWindow;
 
 public class MainWindowViewModel : IMainWindowViewModel
 {
     private readonly IMainWindowMementoWrapper _mainWindowMementoWrapper;
+    private readonly IWindowManager _windowManager;
+    private readonly Command _closeMainWindowCommand;
 
-    public MainWindowViewModel(IMainWindowMementoWrapper mainWindowMementoWrapper)
+    public MainWindowViewModel(
+        IMainWindowMementoWrapper mainWindowMementoWrapper,
+        IWindowManager windowManager)
     {
         _mainWindowMementoWrapper = mainWindowMementoWrapper;
+        _windowManager = windowManager;
+        _closeMainWindowCommand = new Command(CloseMainWindow);
     }
 
     public double Left
@@ -42,4 +51,11 @@ public class MainWindowViewModel : IMainWindowViewModel
     }
 
     public string Title => "AnchorCalc";
+
+    public ICommand CloseMainWindowCommand=>_closeMainWindowCommand;
+
+    private void CloseMainWindow()
+    {
+        _windowManager.Close(this);
+    }
 }

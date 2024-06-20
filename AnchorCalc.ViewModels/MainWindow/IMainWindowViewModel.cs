@@ -1,6 +1,7 @@
-﻿namespace AnchorCalc.ViewModels.MainWindow;
+﻿using AnchorCalc.ViewModels.Windows;
 
-public interface IMainWindowViewModel
+namespace AnchorCalc.ViewModels.MainWindow;
+
+public interface IMainWindowViewModel : IWindowViewModel
 {
-
 }
