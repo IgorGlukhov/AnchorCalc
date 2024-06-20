@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using AnchorCalc.Infrastructure.Common;
 using AnchorCalc.Infrastructure.Settings;
 using AnchorCalc.ViewModels.MainWindow;
 using AnchorCalc.ViewModels.Windows;
@@ -21,11 +22,6 @@ public class Bootstrapper : IDisposable
         _container = containerBuilder.Build();
     }
 
-    public void Dispose()
-    {
-        _container.Dispose();
-    }
-
     public Window Run()
     {
         InitializeDependencies();
@@ -38,6 +34,14 @@ public class Bootstrapper : IDisposable
 
     private void InitializeDependencies()
     {
-        _container.Resolve<IMainWindowMementoWrapperInitializer>().Initialize();
+        _container.Resolve<IPathServiceInitializer>().Initialize();
+        var windowMementoWrapperInitializers = _container.Resolve<IEnumerable<IWindowMementoWrapperInitializer>>();
+        foreach (var windowMementoWrapperInitializer in windowMementoWrapperInitializers)
+            windowMementoWrapperInitializer.Initialize();
+    }
+
+    public void Dispose()
+    {
+        _container.Dispose();
     }
 }

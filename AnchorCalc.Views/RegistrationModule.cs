@@ -1,11 +1,12 @@
 ﻿using AnchorCalc.ViewModels.Windows;
+using AnchorCalc.Views.AboutWindow;
 using AnchorCalc.Views.MainWindow;
 using AnchorCalc.Views.Windows;
 using Autofac;
 
 namespace AnchorCalc.Views;
 
-public class RegistrationModule:Module
+public class RegistrationModule : Module
 {
     protected override void Load(ContainerBuilder builder)
     {
@@ -17,5 +18,8 @@ public class RegistrationModule:Module
         builder.RegisterType<WindowManager>()
             .As<IWindowManager>()
             .SingleInstance();
+        builder.RegisterType<AboutWindow.AboutWindow>()
+            .As<IAboutWindow>()
+            .InstancePerDependency();
     }
 }

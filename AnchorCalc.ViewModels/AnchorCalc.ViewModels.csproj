@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="MainWindow\" />
+    <Folder Include="AboutWindow\" />
     <Folder Include="Commands\" />
     <Folder Include="Windows\" />
   </ItemGroup>

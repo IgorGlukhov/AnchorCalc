@@ -1,6 +1,6 @@
 ﻿namespace AnchorCalc.Infrastructure.Settings;
 
-public interface IMainWindowMementoWrapperInitializer
+public interface IWindowMementoWrapperInitializer
 {
     void Initialize();
 }
