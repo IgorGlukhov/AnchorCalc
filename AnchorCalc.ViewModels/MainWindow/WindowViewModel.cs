@@ -1,8 +1,9 @@
 ﻿using AnchorCalc.Domain.Settings;
+using AnchorCalc.ViewModels.Windows;
 
 namespace AnchorCalc.ViewModels.MainWindow;
 
-public abstract class WindowViewModel<TWindowMementoWrapper>
+public abstract class WindowViewModel<TWindowMementoWrapper>:IWindowViewModel
     where TWindowMementoWrapper : class, IWindowMementoWrapper
 {
     private readonly TWindowMementoWrapper _windowMementoWrapper;
@@ -40,5 +41,9 @@ public abstract class WindowViewModel<TWindowMementoWrapper>
     {
         get => _windowMementoWrapper.IsMaximized;
         set => _windowMementoWrapper.IsMaximized = value;
+    }
+
+    public virtual void WindowClosing()
+    {
     }
 }
