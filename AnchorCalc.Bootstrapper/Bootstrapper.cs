@@ -11,7 +11,7 @@ namespace AnchorCalc.Bootstrapper;
 public class Bootstrapper : IDisposable
 {
     private readonly IContainer _container;
-    private IMainWindowViewModel _mainWindowViewModel;
+    private IMainWindowViewModel? _mainWindowViewModel;
 
     public Bootstrapper()
     {
@@ -45,7 +45,7 @@ public class Bootstrapper : IDisposable
 
     public void Dispose()
     {
-        _mainWindowViewModel.Dispose();
+        _mainWindowViewModel?.Dispose();
         _container.Dispose();
     }
 }

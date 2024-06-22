@@ -2,7 +2,7 @@
 
 internal class PathService : IPathService, IPathServiceInitializer
 {
-    private string _applicationFolder;
+    private string _applicationFolder=String.Empty;
     private bool _initialized;
 
     public string ApplicationFolder

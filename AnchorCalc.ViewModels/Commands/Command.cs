@@ -21,4 +21,9 @@ public class Command:ICommand
     }
 
     public event EventHandler? CanExecuteChanged;
+
+    protected void OnCanExecuteChanged()
+    {
+        CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+    }
 }

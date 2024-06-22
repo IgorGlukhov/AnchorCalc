@@ -22,16 +22,16 @@
         <Menu Grid.Row="0">
             <MenuItem Header="File">
                 <MenuItem Header="Exit"
-                          Command="{Binding CloseMainWindowCommand}" />
+                          Command="{Binding MenuViewModel.CloseMainWindowCommand}" />
             </MenuItem>
             <MenuItem Header="Help">
                 <MenuItem Header="About"
-                          Command="{Binding OpenAboutWindowCommand}" />
+                          Command="{Binding MenuViewModel.OpenAboutWindowCommand}" />
             </MenuItem>
         </Menu>
 
         <StatusBar Grid.Row="2">
-            <StatusBarItem Content="{Binding Version}" />
+            <StatusBarItem Content="{Binding StatusBarViewModel.Version}" />
         </StatusBar>
     </Grid>
 </Window>

@@ -10,7 +10,7 @@ internal abstract class WindowMementoWrapper<TMemento> : IWindowMementoWrapperIn
 {
     private readonly IPathService _pathService;
     private bool _initialized;
-    private string? _settingsFilePath;
+    private string _settingsFilePath=String.Empty;
     private TMemento _windowMemento;
 
     protected WindowMementoWrapper(IPathService pathService)
@@ -103,7 +103,8 @@ internal abstract class WindowMementoWrapper<TMemento> : IWindowMementoWrapperIn
         if (!File.Exists(_settingsFilePath))
             return;
         var serializedMemento = File.ReadAllText(_settingsFilePath);
-        _windowMemento = JsonConvert.DeserializeObject<TMemento>(serializedMemento);
+        _windowMemento = JsonConvert.DeserializeObject<TMemento>(serializedMemento)
+                         ??throw new InvalidOperationException("Deserialized memento can't be null");
     }
 
     private void EnsureInitialized()
