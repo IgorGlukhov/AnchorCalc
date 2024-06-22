@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using AnchorCalc.Domain.Factories;
 using AnchorCalc.Infrastructure.Common;
 using AnchorCalc.Infrastructure.Settings;
 using AnchorCalc.ViewModels.MainWindow;
@@ -10,6 +11,7 @@ namespace AnchorCalc.Bootstrapper;
 public class Bootstrapper : IDisposable
 {
     private readonly IContainer _container;
+    private IMainWindowViewModel _mainWindowViewModel;
 
     public Bootstrapper()
     {
@@ -25,9 +27,10 @@ public class Bootstrapper : IDisposable
     public Window Run()
     {
         InitializeDependencies();
-        var mainWindowViewModel = _container.Resolve<IMainWindowViewModel>();
+        var mainWindowViewModelFactory = _container.Resolve<IFactory<IMainWindowViewModel>>();
+        _mainWindowViewModel = mainWindowViewModelFactory.Create();
         var windowManager = _container.Resolve<IWindowManager>();
-        var mainWindow = windowManager.Show(mainWindowViewModel);
+        var mainWindow = windowManager.Show(_mainWindowViewModel);
         if (mainWindow is not Window window) throw new NotImplementedException();
         return window;
     }
@@ -42,6 +45,7 @@ public class Bootstrapper : IDisposable
 
     public void Dispose()
     {
+        _mainWindowViewModel.Dispose();
         _container.Dispose();
     }
 }

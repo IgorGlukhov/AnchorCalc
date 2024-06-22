@@ -18,7 +18,12 @@ internal class WindowManager : IWindowManager
     public IWindow Show<TWindowViewModel>(TWindowViewModel viewModel)
         where TWindowViewModel : IWindowViewModel
     {
-        var window = _windowFactory.Create(viewModel);
+        if (_viewModelToWindowMap.TryGetValue(viewModel, out var window))
+        {
+            window.Activate();
+            return window;
+        }
+        window = _windowFactory.Create(viewModel);
         _viewModelToWindowMap.Add(viewModel, window);
         _windowToViewModelMap.Add(window, viewModel);
         window.Closing += OnWindowClosing;
@@ -28,9 +33,9 @@ internal class WindowManager : IWindowManager
     }
 
     public void Close<TWindowViewModel>(TWindowViewModel viewModel)
-        where TWindowViewModel : IWindowViewModel
+        where TWindowViewModel : IWindowViewModel?
     {
-        if (_viewModelToWindowMap.TryGetValue(viewModel, out var window)) 
+        if (viewModel!=null&&_viewModelToWindowMap.TryGetValue(viewModel, out var window)) 
             window.Close();
     }
 

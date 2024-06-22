@@ -1,4 +1,5 @@
 ﻿using System.Windows.Input;
+using AnchorCalc.Domain.Factories;
 using AnchorCalc.Domain.Settings;
 using AnchorCalc.Domain.Version;
 using AnchorCalc.ViewModels.AboutWindow;
@@ -9,7 +10,8 @@ namespace AnchorCalc.ViewModels.MainWindow;
 
 public class MainWindowViewModel : WindowViewModel<IMainWindowMementoWrapper>, IMainWindowViewModel
 {
-    private readonly IAboutWindowViewModel _aboutWindowViewModel;
+    private readonly IFactory<IAboutWindowViewModel> _aboutWindowViewModelFactory;
+    private IAboutWindowViewModel? _aboutWindowViewModel;
     private readonly Command _closeMainWindowCommand;
     private readonly IWindowManager _windowManager;
     private readonly Command _openAboutWindowCommand;
@@ -17,12 +19,12 @@ public class MainWindowViewModel : WindowViewModel<IMainWindowMementoWrapper>, I
     public MainWindowViewModel(
         IMainWindowMementoWrapper mainWindowMementoWrapper,
         IWindowManager windowManager,
-        IAboutWindowViewModel aboutWindowViewModel,
+        IFactory<IAboutWindowViewModel> aboutWindowViewModelFactory,
         IApplicationVersionProvider applicationVersionProvider)
         : base(mainWindowMementoWrapper)
     {
         _windowManager = windowManager;
-        _aboutWindowViewModel = aboutWindowViewModel;
+        _aboutWindowViewModelFactory = aboutWindowViewModelFactory;
         _closeMainWindowCommand = new Command(CloseMainWindow);
         _openAboutWindowCommand = new Command(OpenAboutWindow);
         Version = $"Version {applicationVersionProvider.Version.ToString(3)}";
@@ -35,7 +37,25 @@ public class MainWindowViewModel : WindowViewModel<IMainWindowMementoWrapper>, I
 
     private void OpenAboutWindow()
     {
-        _windowManager.Show(_aboutWindowViewModel);
+        if (_aboutWindowViewModel==null)
+        {
+            _aboutWindowViewModel = _aboutWindowViewModelFactory.Create();
+            var aboutWindow = _windowManager.Show(_aboutWindowViewModel);
+            aboutWindow.Closed += OnAboutWindowClosed;
+        }
+        else
+        {
+            _windowManager.Show(_aboutWindowViewModel);
+        }
+    }
+
+    private void OnAboutWindowClosed(object? sender, EventArgs e)
+    {
+        if (sender is IWindow window)
+        {
+            window.Closed -= OnAboutWindowClosed;
+            _aboutWindowViewModel = null;
+        }
     }
 
     private void CloseMainWindow()
@@ -45,6 +65,11 @@ public class MainWindowViewModel : WindowViewModel<IMainWindowMementoWrapper>, I
 
     public override void WindowClosing()
     {
+        base.WindowClosing();
         _windowManager.Close(_aboutWindowViewModel);
+    }
+
+    public void Dispose()
+    {
     }
 }

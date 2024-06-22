@@ -11,9 +11,9 @@ public class RegistrationModule : Module
         base.Load(builder);
         builder.RegisterType<MainWindowViewModel>()
             .As<IMainWindowViewModel>()
-            .InstancePerDependency();
+            .InstancePerDependency().ExternallyOwned();
         builder.RegisterType<AboutWindowViewModel>()
             .As<IAboutWindowViewModel>()
-            .InstancePerDependency();
+            .InstancePerDependency().ExternallyOwned();
     }
 }
