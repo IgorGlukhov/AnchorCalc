@@ -3,7 +3,7 @@ using Autofac;
 
 namespace AnchorCalc.Bootstrapper.Factories;
 
-public class Factory<TResult>:IFactory<TResult>
+public class Factory<TResult> : IFactory<TResult>
 {
     private readonly IComponentContext _componentContext;
 
@@ -11,6 +11,7 @@ public class Factory<TResult>:IFactory<TResult>
     {
         _componentContext = componentContext;
     }
+
     public TResult Create()
     {
         var factory = _componentContext.Resolve<Func<TResult>>();

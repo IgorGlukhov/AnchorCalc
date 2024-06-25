@@ -2,7 +2,6 @@
 
 namespace AnchorCalc.ViewModels.MainWindow;
 
-public interface IMainWindowViewModel : IWindowViewModel,IDisposable
+public interface IMainWindowViewModel : IWindowViewModel, IDisposable
 {
-
 }

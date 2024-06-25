@@ -1,5 +1,4 @@
-﻿using System.Windows;
-using AnchorCalc.ViewModels.AboutWindow;
+﻿using AnchorCalc.ViewModels.AboutWindow;
 
 namespace AnchorCalc.Views.AboutWindow;
 

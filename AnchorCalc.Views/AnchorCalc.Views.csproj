@@ -9,6 +9,10 @@
 
   <ItemGroup>
     <PackageReference Include="Autofac" Version="8.0.0" />
+    <PackageReference Include="Extended.Wpf.Toolkit" Version="4.6.0" />
+    <PackageReference Include="HelixToolkit" Version="2.25.0" />
+    <PackageReference Include="HelixToolkit.Core.Wpf" Version="2.25.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
   <ItemGroup>
@@ -18,7 +22,6 @@
   <ItemGroup>
     <Folder Include="Converters\" />
     <Folder Include="Factories\" />
-    <Folder Include="Windows\" />
   </ItemGroup>
 
 </Project>

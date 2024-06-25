@@ -1,6 +1,6 @@
 ﻿namespace AnchorCalc.Infrastructure.Settings;
 
-internal class MainWindowMemento:WindowMemento
+internal class MainWindowMemento : WindowMemento
 {
     public MainWindowMemento()
     {

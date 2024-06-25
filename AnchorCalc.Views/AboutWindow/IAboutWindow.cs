@@ -2,6 +2,6 @@
 
 namespace AnchorCalc.Views.AboutWindow;
 
-public interface IAboutWindow:IWindow
+public interface IAboutWindow : IWindow
 {
 }

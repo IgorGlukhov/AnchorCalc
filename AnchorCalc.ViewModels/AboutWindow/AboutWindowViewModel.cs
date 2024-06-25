@@ -7,7 +7,7 @@ namespace AnchorCalc.ViewModels.AboutWindow;
 public class AboutWindowViewModel : WindowViewModel<IAboutWindowMementoWrapper>, IAboutWindowViewModel
 {
     public AboutWindowViewModel(IAboutWindowMementoWrapper windowMementoWrapper,
-        IApplicationVersionProvider applicationVersionProvider) 
+        IApplicationVersionProvider applicationVersionProvider)
         : base(windowMementoWrapper)
     {
         Version = $"Version {applicationVersionProvider.Version.ToString(3)}";

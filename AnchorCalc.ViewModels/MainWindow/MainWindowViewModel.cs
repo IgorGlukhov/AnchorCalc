@@ -8,23 +8,23 @@ public class MainWindowViewModel : WindowViewModel<IMainWindowMementoWrapper>, I
 {
     private readonly IWindowManager _windowManager;
 
-
     public MainWindowViewModel(
         IMainWindowMementoWrapper mainWindowMementoWrapper,
         IWindowManager windowManager,
         IFactory<IMainWindowStatusBarViewModel> mainWindowStatusBarViewModelFactory,
-        IFactory<IMainWindowMenuViewModel> mainWindowMenuViewModelFactory)
+        IFactory<IMainWindowMenuViewModel> mainWindowMenuViewModelFactory,
+        IFactory<IMainWindowSurfacePlotViewModel> mainWindowSurfacePlotViewModelFactory)
         : base(mainWindowMementoWrapper)
     {
         _windowManager = windowManager;
         StatusBarViewModel = mainWindowStatusBarViewModelFactory.Create();
-
-
         MenuViewModel = mainWindowMenuViewModelFactory.Create();
+        SurfacePlotViewModel = mainWindowSurfacePlotViewModelFactory.Create();
         MenuViewModel.MainWindowClosingRequested += OnMainWindowClosingRequested;
     }
 
     public IMainWindowMenuViewModel MenuViewModel { get; }
+    public IMainWindowSurfacePlotViewModel SurfacePlotViewModel { get; }
     public IMainWindowStatusBarViewModel StatusBarViewModel { get; }
 
     public string Title => "AnchorCalc";

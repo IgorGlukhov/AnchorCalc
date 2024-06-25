@@ -14,13 +14,13 @@
         WindowStyle="SingleBorderWindow"
         ResizeMode="NoResize"
         d:DataContext="{d:DesignInstance aboutWindow:AboutWindowViewModel}">
-        <StackPanel Orientation="Vertical"
-                    VerticalAlignment="Center"
-                    HorizontalAlignment="Center">
-            <TextBlock Text="AnchorCalc"
-                       FontWeight="Bold"
-                       FontSize="26"/>
-            <TextBlock Text="{Binding Version}"
-                       TextAlignment="Center"/>
+    <StackPanel Orientation="Vertical"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Center">
+        <TextBlock Text="AnchorCalc"
+                   FontWeight="Bold"
+                   FontSize="26" />
+        <TextBlock Text="{Binding Version}"
+                   TextAlignment="Center" />
     </StackPanel>
 </Window>

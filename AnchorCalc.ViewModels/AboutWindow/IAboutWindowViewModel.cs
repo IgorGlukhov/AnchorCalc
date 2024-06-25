@@ -2,6 +2,6 @@
 
 namespace AnchorCalc.ViewModels.AboutWindow;
 
-public interface IAboutWindowViewModel:IWindowViewModel
+public interface IAboutWindowViewModel : IWindowViewModel
 {
 }

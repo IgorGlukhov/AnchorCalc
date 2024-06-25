@@ -4,8 +4,8 @@ namespace AnchorCalc.ViewModels.MainWindow;
 
 public interface IMainWindowMenuViewModel
 {
-    public event Action? MainWindowClosingRequested;
     ICommand CloseMainWindowCommand { get; }
     ICommand OpenAboutWindowCommand { get; }
+    public event Action? MainWindowClosingRequested;
     void CloseAboutWindow();
 }

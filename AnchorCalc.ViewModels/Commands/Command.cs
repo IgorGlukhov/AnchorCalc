@@ -2,7 +2,7 @@
 
 namespace AnchorCalc.ViewModels.Commands;
 
-public class Command:ICommand
+public class Command : ICommand
 {
     private readonly Action _execute;
 
@@ -10,6 +10,7 @@ public class Command:ICommand
     {
         _execute = execute;
     }
+
     public bool CanExecute(object? parameter)
     {
         return true;

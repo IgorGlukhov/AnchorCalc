@@ -1,5 +1,5 @@
 ﻿namespace AnchorCalc.Domain.Settings;
 
-public interface IAboutWindowMementoWrapper:IWindowMementoWrapper
+public interface IAboutWindowMementoWrapper : IWindowMementoWrapper
 {
 }

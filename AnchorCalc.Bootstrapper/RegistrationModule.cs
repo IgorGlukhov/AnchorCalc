@@ -6,7 +6,7 @@ using WindowFactory = AnchorCalc.Views.Factories.WindowFactory;
 
 namespace AnchorCalc.Bootstrapper;
 
-public class RegistrationModule:Module
+public class RegistrationModule : Module
 {
     protected override void Load(ContainerBuilder builder)
     {

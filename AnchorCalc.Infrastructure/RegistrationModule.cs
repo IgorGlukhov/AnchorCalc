@@ -24,8 +24,6 @@ public class RegistrationModule : Module
             .As<IAboutWindowMementoWrapper>()
             .As<IWindowMementoWrapperInitializer>()
             .SingleInstance();
-        builder.RegisterType<ApplicationVersionProvider>().
-            As<IApplicationVersionProvider>().
-            SingleInstance();
+        builder.RegisterType<ApplicationVersionProvider>().As<IApplicationVersionProvider>().SingleInstance();
     }
 }
