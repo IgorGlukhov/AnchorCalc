@@ -4,7 +4,7 @@ namespace AnchorCalc.ViewModels.MainWindow;
 
 public interface IMainWindowSurfacePlotViewModel : IDisposable
 {
-    public Point3D[,] DataPoints { get; set; }
+    public Point3D[,] DataPoints { get; }
     public string Title { get; set; }
 
     public string XAxisLabel { get; set; }

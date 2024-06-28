@@ -162,7 +162,7 @@ public class Matrix
         for (var r = 0; r < rows; r++)
         {
             double sum = 0;
-            for (var c = 0; c < rows; c++) sum = sum + leftmatrix[r, c] * rightmatrix[c, 0];
+            for (var c = 0; c < rows; c++) sum +=leftmatrix[r, c] * rightmatrix[c, 0];
             result[r, 0] = sum;
         }
 
@@ -179,7 +179,7 @@ public class Matrix
         for (var c = 0; c < columns; c++)
         {
             sum = 0;
-            for (var r = 0; r < rows; r++) sum = sum + matrix[r, c];
+            for (var r = 0; r < rows; r++) sum += matrix[r, c];
             result[c] = sum;
         }
 
@@ -190,7 +190,7 @@ public class Matrix
     {
         var numbers = vector.GetLength(0);
         double result = 0;
-        for (var n = 0; n < numbers; n++) result = result + vector[n];
+        for (var n = 0; n < numbers; n++) result += vector[n];
         return result;
     }
 

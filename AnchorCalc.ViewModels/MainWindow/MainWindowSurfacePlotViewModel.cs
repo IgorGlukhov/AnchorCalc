@@ -1,101 +1,145 @@
-﻿using System.Windows.Media.Media3D;
+﻿using System.Globalization;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Media3D;
 using AnchorCalc.Infrastructure.Calc;
+using AnchorCalc.ViewModels.Commands;
 using AnchorCalc.ViewModels.Plotters;
+using HelixToolkit.Wpf;
 
 namespace AnchorCalc.ViewModels.MainWindow;
 
 public class MainWindowSurfacePlotViewModel : ViewModel, IMainWindowSurfacePlotViewModel
 {
-    private double _a;
+    private readonly Command _addCoordinateContainersCommand;
+    private readonly Command _enterPropertiesCommand;
+    private double _a = 300;
 
-    private int _anchorCount;
+    private int _anchorCount = 4;
 
-    private double _b;
+    private double _b = 300;
 
-    private double _d;
+    private double _d = 12;
 
     private Point3D[,] _dataPoints = new Point3D[1, 1];
-    private double _e1;
+    private double _e1 = 0.0015;
 
-    private double _h;
+    private double _h = 100;
+    private readonly List<TextBox> _listTextBoxX = new();
+    private readonly List<TextBox> _listTextBoxY = new();
 
-    private int _multipleX;
+    private int _multipleX = 1000;
 
-    private int _multipleY;
+    private int _multipleY = 1000;
 
-    private int _multipleZ;
+    private int _multipleZ = 10;
 
-    private double _mx;
+    private double _mx = 3;
 
-    private double _my;
+    private double _my = 10;
 
-    private double _n;
+    private double _n = 10;
+    private StackPanel _numberCoordinatesStack = new();
 
-    private double _rb;
+    private double _rb = 17;
 
-    private string _title = string.Empty;
+    private string _title = "Напряжения в бетоне основания";
 
-    private double _tough;
+    private double _tough = 100;
 
-    private int _triangulation;
+    private int _triangulation = 100;
 
-    private string _xAxisLabel = string.Empty;
+    private string _xAxisLabel = "X";
+    private StackPanel _xCoordinatesStack = new();
     private double[,] _xData2DArray = new double[1, 1];
 
-    private string _yAxisLabel = string.Empty;
+    private string _yAxisLabel = "Y";
+    private StackPanel _yCoordinatesStack = new();
     private double[,] _yData2DArray = new double[1, 1];
 
-    private string _zAxisLabel = string.Empty;
+    private string _zAxisLabel = "Z";
     private double[,] _zData2DArray = new double[1, 1];
+    private double[,] _zsx = { { -110, -110, 110, 110 } };
+    private double[,] _zsy = { { -110, 110, -110, 110 } };
 
     public MainWindowSurfacePlotViewModel()
     {
-        Title = "Напряжения в бетоне основания";
-        XAxisLabel = "X";
-        YAxisLabel = "Y";
-        ZAxisLabel = "Z";
-        N = 10;
-        Mx = 3;
-        My = 10;
-        Tough = 100;
-        H = 100;
-        D = 12;
-        Rb = 17;
-        A = 300;
-        B = 300;
-        Triangulation = 100;
-        MultipleX = 1000;
-        MultipleY = 1000;
-        MultipleZ = 10;
-        E1 = 0.0015;
-        Zsx = new double[,] { { -110, -110, 110, 110 } };
-        Zsy = new double[,] { { -110, 110, -110, 110 } };
-
-        var calc = new Calc(N, Mx, My, Tough, H, D, Rb, E1, A, B, Triangulation,
-            Zsx, Zsy, MultipleX, MultipleY, MultipleZ);
-        ZData2DArray = calc.Zbz;
-        XData2DArray = calc.Zbx;
-        YData2DArray = calc.Zby;
-        DataPoints = PlotFromArray.Plot(XData2DArray, YData2DArray, ZData2DArray);
+        _enterPropertiesCommand = new Command(EnterProperties);
+        _addCoordinateContainersCommand = new Command(AddCoordinateContainers);
+        AddCoordinateContainers();
+        ModelChange();
     }
+
+    public StackPanel NumberCoordinatesStack
+    {
+        get => _numberCoordinatesStack;
+        private set
+        {
+            _numberCoordinatesStack = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public StackPanel XCoordinatesStack
+    {
+        get => _xCoordinatesStack;
+        private set
+        {
+            _xCoordinatesStack = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public StackPanel YCoordinatesStack
+    {
+        get => _yCoordinatesStack;
+        private set
+        {
+            _yCoordinatesStack = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public ICommand EnterPropertiesCommand => _enterPropertiesCommand;
+    public ICommand AddCoordinateContainersCommand => _addCoordinateContainersCommand;
 
     public double[,] XData2DArray
     {
         get => _xData2DArray;
-        set
+        private set
         {
             _xData2DArray = value;
             OnPropertyChanged();
         }
     }
 
-    public double[,] Zsx { get; }
-    public double[,] Zsy { get; }
+    public double[,] Zsx
+    {
+        get => _zsx;
+        set
+        {
+            _zsx = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public double[,] Zsy
+    {
+        get => _zsy;
+        set
+        {
+            _zsy = value;
+            OnPropertyChanged();
+        }
+    }
+
 
     public double[,] YData2DArray
     {
         get => _yData2DArray;
-        set
+        private set
         {
             _yData2DArray = value;
             OnPropertyChanged();
@@ -105,7 +149,7 @@ public class MainWindowSurfacePlotViewModel : ViewModel, IMainWindowSurfacePlotV
     public double[,] ZData2DArray
     {
         get => _zData2DArray;
-        set
+        private set
         {
             _zData2DArray = value;
             OnPropertyChanged();
@@ -125,7 +169,7 @@ public class MainWindowSurfacePlotViewModel : ViewModel, IMainWindowSurfacePlotV
     public Point3D[,] DataPoints
     {
         get => _dataPoints;
-        set
+        private set
         {
             _dataPoints = value;
             OnPropertyChanged();
@@ -314,7 +358,79 @@ public class MainWindowSurfacePlotViewModel : ViewModel, IMainWindowSurfacePlotV
         }
     }
 
+    private void AddCoordinateContainers()
+    {
+        NumberCoordinatesStack = new StackPanel();
+        XCoordinatesStack = new StackPanel();
+        YCoordinatesStack = new StackPanel();
+        _listTextBoxX.Clear();
+        _listTextBoxY.Clear();
+
+        for (var i = 0; i < AnchorCount; i++)
+        {
+            var textBoxX = new TextBox();
+            if (Zsx.GetLength(1) > i) textBoxX.Text = Zsx[0, i].ToString(CultureInfo.CurrentCulture);
+            _listTextBoxX.Add(textBoxX);
+            XCoordinatesStack.Children.Add(textBoxX);
+        }
+
+        for (var i = 0; i < AnchorCount; i++)
+        {
+            var textBoxY = new TextBox();
+            if (Zsy.GetLength(1) > i) textBoxY.Text = Zsy[0, i].ToString(CultureInfo.CurrentCulture);
+            _listTextBoxY.Add(textBoxY);
+            YCoordinatesStack.Children.Add(textBoxY);
+        }
+
+        for (var i = 0; i < AnchorCount; i++)
+        {
+            var border = new Border
+            {
+                BorderThickness = new Thickness(1),
+                BorderBrush = new SolidColorBrush(Colors.Black)
+            };
+            var textBoxNumber = new TextBlock
+            {
+                Text = (i + 1).ToString()
+            };
+            border.Child = textBoxNumber;
+            NumberCoordinatesStack.Children.Add(border);
+        }
+
+    }
+
+    private void EnterProperties()
+    {
+        if (_listTextBoxX.Count > 0 && _listTextBoxY.Count > 0)
+        {
+            Zsx = new double[1, AnchorCount];
+            Zsy = new double[1, AnchorCount];
+            for (var i = 0; i < AnchorCount; i++)
+            {
+                Zsx[0, i] = double.Parse(_listTextBoxX[i].Text);
+                Zsy[0, i] = double.Parse(_listTextBoxY[i].Text);
+            }
+        }
+        else
+        {
+            throw new Exception();
+        }
+
+        ModelChange();
+    }
+
+    private void ModelChange()
+    {
+        var calc = new Calc(N, Mx, My, Tough, H, D, Rb, E1, A, B, Triangulation,
+            Zsx, Zsy, MultipleX, MultipleY, MultipleZ);
+        ZData2DArray = calc.Zbz;
+        XData2DArray = calc.Zbx;
+        YData2DArray = calc.Zby;
+        DataPoints = PlotFromArray.Plot(XData2DArray, YData2DArray, ZData2DArray);
+    }
+
     public void Dispose()
     {
+        GC.SuppressFinalize(this);
     }
 }

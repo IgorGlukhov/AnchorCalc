@@ -5,8 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:mainWindow="clr-namespace:AnchorCalc.ViewModels.MainWindow;assembly=AnchorCalc.ViewModels"
         xmlns:converters="clr-namespace:AnchorCalc.Views.Converters"
-        xmlns:plotter="clr-namespace:AnchorCalc.Views.Plotters"
-        xmlns:h="http://helix-toolkit.org/wpf"
+        xmlns:controls="clr-namespace:AnchorCalc.Views.MainWindow.Controls"
         mc:Ignorable="d"
         Title="{Binding Title, Mode=OneTime}"
         Left="{Binding Left, Mode=TwoWay}"
@@ -22,53 +21,21 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="300*"/>
-            <ColumnDefinition Width="300*"/>
+            <ColumnDefinition Width="200*" />
+            <ColumnDefinition Width="400*" />
+            <ColumnDefinition Width="200*" />
         </Grid.ColumnDefinitions>
         <Menu Grid.Row="0">
             <MenuItem Header="File">
-                <MenuItem Header="Exit"
-                          Command="{Binding MenuViewModel.CloseMainWindowCommand}" />
+                <MenuItem Header="Exit" Command="{Binding MenuViewModel.CloseMainWindowCommand}" />
             </MenuItem>
             <MenuItem Header="Help">
-                <MenuItem Header="About"
-                          Command="{Binding MenuViewModel.OpenAboutWindowCommand}" />
+                <MenuItem Header="About" Command="{Binding MenuViewModel.OpenAboutWindowCommand}" />
             </MenuItem>
         </Menu>
-
-        <Grid Grid.Row="1"
-              Grid.Column="1"
-              HorizontalAlignment="Stretch"
-              x:Name="SurfacePlot"
-              d:DataContext="{d:DesignInstance mainWindow:MainWindowSurfacePlotViewModel}"
-              d:DesignHeight="300" d:DesignWidth="300">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="10" />
-                <RowDefinition Height="11*" />
-            </Grid.RowDefinitions>
-            <TextBlock
-                Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}"
-                Grid.Row="0"
-                Margin="10"
-                HorizontalAlignment="Center" />
-            <h:HelixViewport3D
-                x:Name="Viewport"
-                Grid.Row="1"
-                HorizontalAlignment="Stretch"
-                ZoomExtentsWhenLoaded="True"
-                PanGesture="LeftClick"
-                ShowViewCube="False"
-                ShowCoordinateSystem="{Binding ShowMiniCoordinates}"
-                CoordinateSystemLabelX="{Binding XAxisLabel}"
-                CoordinateSystemLabelY="{Binding YAxisLabel}"
-                CoordinateSystemLabelZ="{Binding ZAxisLabel}">
-                <h:HelixViewport3D.Camera>
-                    <PerspectiveCamera LookDirection="1,1,-1" UpDirection="0,0,1" />
-                </h:HelixViewport3D.Camera>
-                <plotter:SurfacePlotter
-                    DataPoints="{Binding DataPoints, UpdateSourceTrigger=PropertyChanged}" />
-            </h:HelixViewport3D>
-        </Grid>
+        <controls:SurfacePropertiesControl Grid.Row="1" Grid.Column="0" x:Name="SurfaceProperties" />
+        <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Grid.RowSpan="3" Grid.Row="0" />
+        <controls:SurfacePlotControl Grid.Row="1" Grid.Column="1" x:Name="SurfacePlot" />
         <StatusBar Grid.Row="2" Grid.Column="0">
             <StatusBarItem Content="{Binding StatusBarViewModel.Version}" />
         </StatusBar>
