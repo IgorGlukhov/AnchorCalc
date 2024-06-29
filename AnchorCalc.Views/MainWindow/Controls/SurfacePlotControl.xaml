@@ -3,13 +3,16 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:h="http://helix-toolkit.org/wpf"
+             xmlns:h="clr-namespace:HelixToolkit.Wpf;assembly=HelixToolkit.Core.Wpf"
              xmlns:plotters="clr-namespace:AnchorCalc.Views.Plotters"
+             xmlns:mainWindow="clr-namespace:AnchorCalc.ViewModels.MainWindow;assembly=AnchorCalc.ViewModels"
              mc:Ignorable="d"
-             d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
+             d:DesignHeight="300" d:DesignWidth="300"
+             d:DataContext="{d:DesignInstance mainWindow:MainWindowSurfacePlotViewModel}"
+             >
+    <Grid Background="Gainsboro">
         <Grid.RowDefinitions>
-            <RowDefinition Height="10" />
+            <RowDefinition Height="40" />
             <RowDefinition Height="11*" />
         </Grid.RowDefinitions>
         <TextBlock
@@ -19,17 +22,19 @@
             HorizontalAlignment="Center" />
         <h:HelixViewport3D
             x:Name="Viewport"
-            Grid.Row="1"
+            Grid.Row="0"
+            Grid.RowSpan="2"
+            ZoomExtentsWhenLoaded="True"
+            ShowViewCube="False"
             PanGesture="LeftClick"
-            ShowViewCube="True"
             ShowCoordinateSystem="{Binding ShowMiniCoordinates}"
             CoordinateSystemLabelX="{Binding XAxisLabel}"
             CoordinateSystemLabelY="{Binding YAxisLabel}"
-            CoordinateSystemLabelZ="{Binding ZAxisLabel}">
+            CoordinateSystemLabelZ="{Binding ZAxisLabel}" >
             <h:HelixViewport3D.Camera>
                 <PerspectiveCamera LookDirection="1,1,-1" UpDirection="0,0,1" />
             </h:HelixViewport3D.Camera>
-            <plotters:SurfacePlotter
+            <plotters:SurfacePlotter 
                 DataPoints="{Binding DataPoints, UpdateSourceTrigger=PropertyChanged}" />
         </h:HelixViewport3D>
     </Grid>

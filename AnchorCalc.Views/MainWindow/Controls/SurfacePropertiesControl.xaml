@@ -5,8 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mainWindow="clr-namespace:AnchorCalc.ViewModels.MainWindow;assembly=AnchorCalc.ViewModels"
              mc:Ignorable="d"
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid d:DataContext="{d:DesignInstance mainWindow:MainWindowSurfacePlotViewModel}">
+             d:DesignHeight="450" d:DesignWidth="800"
+             >
+    <Grid d:DataContext="{d:DesignInstance mainWindow:MainWindowSurfacePlotViewModel}" Background="White">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="20" />
             <ColumnDefinition Width="Auto" />
@@ -21,8 +22,6 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <TextBlock Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0" Text="Отчет" FontSize="16" FontWeight="Bold"
-                   HorizontalAlignment="Center" Margin="5" />
         <TextBlock Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1"
                    Text="Расчет анкерного крепления с жесткой опорной пластиной" FontSize="12" FontWeight="Light"
                    HorizontalAlignment="Center" Margin="5" />
@@ -31,61 +30,120 @@
 
         <StackPanel Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="3" Margin="0" Orientation="Vertical"
                     HorizontalAlignment="Stretch">
-            <TextBlock Text="Mx, кН*м" FontSize="12" FontWeight="Normal" HorizontalAlignment="Left" Height="16" />
-            <TextBlock Text="My, кН*м" FontSize="12" FontWeight="Normal" HorizontalAlignment="Left" Height="16" />
-            <TextBlock Text="N, кН" FontSize="12" FontWeight="Normal" HorizontalAlignment="Left" Height="16" />
-            <TextBlock Text="Жесткость анкера, кН/м" FontSize="12" FontWeight="Normal" HorizontalAlignment="Left"
-                       Height="16" />
-            <TextBlock Text="Глубина заделки анкера, мм" FontSize="12" FontWeight="Normal"
-                       HorizontalAlignment="Left" Height="16" />
-            <TextBlock Text="Диаметр анкера, мм" FontSize="12" FontWeight="Normal" HorizontalAlignment="Left"
-                       Height="16" />
-            <TextBlock Text="Расчетное сопротивление бетона, МПа" FontSize="12" FontWeight="Normal"
-                       HorizontalAlignment="Left" Height="16" />
-            <TextBlock Text="Ширина опорной пластины, мм" FontSize="12" FontWeight="Normal"
-                       HorizontalAlignment="Left" Height="16" />
-            <TextBlock Text="Длина опорной пластины, мм" FontSize="12" FontWeight="Normal"
-                       HorizontalAlignment="Left" Height="16" />
-            <TextBlock Text="Кратность триангуляции пластины" FontSize="12" FontWeight="Normal"
-                       HorizontalAlignment="Left" Height="16" />
-            <TextBlock Text="Кратность по X" FontSize="12" FontWeight="Normal" HorizontalAlignment="Left"
-                       Height="16" />
-            <TextBlock Text="Кратность по Y" FontSize="12" FontWeight="Normal" HorizontalAlignment="Left"
-                       Height="16" />
-            <TextBlock Text="Кратность по Z" FontSize="12" FontWeight="Normal" HorizontalAlignment="Left"
-                       Height="16" />
-            <TextBlock Text="Количество анкеров" FontSize="12" FontWeight="Normal" HorizontalAlignment="Left"
-                       Height="16" />
+            <StackPanel.Children>
+                <Border BorderThickness="1" BorderBrush="Black" Background="White">
+                    <TextBlock Text="Mx, кН*м" FontSize="12" FontWeight="Normal" HorizontalAlignment="Left" Height="16" />
+                </Border>
+                <Border BorderThickness="1" BorderBrush="Black" Background="White">
+                    <TextBlock Text="My, кН*м" FontSize="12" FontWeight="Normal" HorizontalAlignment="Left" Height="16" />
+                </Border>
+                <Border BorderThickness="1" BorderBrush="Black" Background="White">
+                    <TextBlock Text="N, кН" FontSize="12" FontWeight="Normal" HorizontalAlignment="Left" Height="16" />
+                </Border>
+                <Border BorderThickness="1" BorderBrush="Black" Background="White">
+                    <TextBlock Text="Жесткость анкера, кН/м" FontSize="12" FontWeight="Normal" HorizontalAlignment="Left"
+           Height="16" />
+                </Border>
+                <Border BorderThickness="1" BorderBrush="Black" Background="White">
+                    <TextBlock Text="Глубина заделки анкера, мм" FontSize="12" FontWeight="Normal"
+           HorizontalAlignment="Left" Height="16" />
+                </Border>
+                <Border BorderThickness="1" BorderBrush="Black" Background="White">
+                    <TextBlock Text="Диаметр анкера, мм" FontSize="12" FontWeight="Normal" HorizontalAlignment="Left"
+           Height="16" />
+                </Border>
+                <Border BorderThickness="1" BorderBrush="Black" Background="White">
+                    <TextBlock Text="Расчетное сопротивление бетона, МПа" FontSize="12" FontWeight="Normal"
+           HorizontalAlignment="Left" Height="16" />
+                </Border>
+                <Border BorderThickness="1" BorderBrush="Black" Background="White">
+                    <TextBlock Text="Ширина опорной пластины, мм" FontSize="12" FontWeight="Normal"
+           HorizontalAlignment="Left" Height="16" />
+                </Border>
+                <Border BorderThickness="1" BorderBrush="Black" Background="White">
+                    <TextBlock Text="Длина опорной пластины, мм" FontSize="12" FontWeight="Normal"
+           HorizontalAlignment="Left" Height="16" />
+                </Border>
+                <Border BorderThickness="1" BorderBrush="Black" Background="White">
+                    <TextBlock Text="Кратность триангуляции пластины" FontSize="12" FontWeight="Normal"
+           HorizontalAlignment="Left" Height="16" />
+                </Border>
+                <Border BorderThickness="1" BorderBrush="Black" Background="White">
+                    <TextBlock Text="Кратность по X" FontSize="12" FontWeight="Normal" HorizontalAlignment="Left"
+           Height="16" />
+                </Border>
+                <Border BorderThickness="1" BorderBrush="Black" Background="White">
+                    <TextBlock Text="Кратность по Y" FontSize="12" FontWeight="Normal" HorizontalAlignment="Left"
+           Height="16" />
+                </Border>
+                <Border BorderThickness="1" BorderBrush="Black" Background="White">
+                    <TextBlock Text="Кратность по Z" FontSize="12" FontWeight="Normal" HorizontalAlignment="Left"
+           Height="16" />
+                </Border>
+                <Border BorderThickness="1" BorderBrush="Black" Opacity="50" Background="White">
+                    <TextBlock Text="Количество анкеров" FontSize="12" FontWeight="Normal" HorizontalAlignment="Left"
+           Height="16" />
+                </Border>
+            </StackPanel.Children>
+
         </StackPanel>
         <StackPanel Grid.Column="2" Grid.Row="3" Margin="0" Orientation="Vertical" HorizontalAlignment="Stretch">
-            <TextBox Text="{Binding Path=Mx, Mode=TwoWay, UpdateSourceTrigger=LostFocus  }" FontSize="12"
-                     FontWeight="Normal" Height="16" />
-            <TextBox Text="{Binding Path=My, Mode=TwoWay, UpdateSourceTrigger=LostFocus  }" FontSize="12"
-                     FontWeight="Normal" Height="16" />
-            <TextBox Text="{Binding Path=N, Mode=TwoWay, UpdateSourceTrigger=LostFocus  }" FontSize="12"
-                     FontWeight="Normal" Height="16" />
-            <TextBox Text="{Binding Path=Tough, Mode=TwoWay, UpdateSourceTrigger=LostFocus  }" FontSize="12"
-                     FontWeight="Normal" Height="16" />
-            <TextBox Text="{Binding Path=H, Mode=TwoWay, UpdateSourceTrigger=LostFocus  }" FontSize="12"
-                     FontWeight="Normal" Height="16" />
-            <TextBox Text="{Binding Path=D, Mode=TwoWay, UpdateSourceTrigger=LostFocus  }" FontSize="12"
-                     FontWeight="Normal" Height="16" />
-            <TextBox Text="{Binding Path=Rb, Mode=TwoWay, UpdateSourceTrigger=LostFocus  }" FontSize="12"
-                     FontWeight="Normal" Height="16" />
-            <TextBox Text="{Binding Path=A, Mode=TwoWay, UpdateSourceTrigger=LostFocus  }" FontSize="12"
-                     FontWeight="Normal" Height="16" />
-            <TextBox Text="{Binding Path=B, Mode=TwoWay, UpdateSourceTrigger=LostFocus  }" FontSize="12"
-                     FontWeight="Normal" Height="16" />
-            <TextBox Text="{Binding Path=Triangulation, Mode=TwoWay, UpdateSourceTrigger=LostFocus  }"
-                     FontSize="12" FontWeight="Normal" Height="16" />
-            <TextBox Text="{Binding Path=MultipleX, Mode=TwoWay, UpdateSourceTrigger=LostFocus  }" FontSize="12"
-                     FontWeight="Normal" Height="16" />
-            <TextBox Text="{Binding Path=MultipleY, Mode=TwoWay, UpdateSourceTrigger=LostFocus  }" FontSize="12"
-                     FontWeight="Normal" Height="16" />
-            <TextBox Text="{Binding Path=MultipleZ, Mode=TwoWay, UpdateSourceTrigger=LostFocus  }" FontSize="12"
-                     FontWeight="Normal" Height="16" />
-            <TextBox Text="{Binding Path=AnchorCount, Mode=TwoWay, UpdateSourceTrigger=LostFocus  }" FontSize="12"
-                     FontWeight="Normal" Height="16" />
+            <Border BorderThickness="1" BorderBrush="Black">
+                <TextBox Text="{Binding Path=Mx, Mode=TwoWay, UpdateSourceTrigger=LostFocus  }" FontSize="12"
+                     FontWeight="Normal" Height="16" BorderThickness="0"/>
+            </Border>
+            <Border BorderThickness="1" BorderBrush="Black">
+                <TextBox Text="{Binding Path=My, Mode=TwoWay, UpdateSourceTrigger=LostFocus  }" FontSize="12"
+                     FontWeight="Normal" Height="16" BorderThickness="0"/>
+            </Border>
+            <Border BorderThickness="1" BorderBrush="Black">
+                <TextBox Text="{Binding Path=N, Mode=TwoWay, UpdateSourceTrigger=LostFocus  }" FontSize="12"
+                     FontWeight="Normal" Height="16" BorderThickness="0"/>
+            </Border>
+            <Border BorderThickness="1" BorderBrush="Black">
+                <TextBox Text="{Binding Path=Tough, Mode=TwoWay, UpdateSourceTrigger=LostFocus  }" FontSize="12"
+                     FontWeight="Normal" Height="16" BorderThickness="0"/>
+            </Border>
+            <Border BorderThickness="1" BorderBrush="Black">
+                <TextBox Text="{Binding Path=H, Mode=TwoWay, UpdateSourceTrigger=LostFocus  }" FontSize="12"
+                     FontWeight="Normal" Height="16" BorderThickness="0"/>
+            </Border>
+            <Border BorderThickness="1" BorderBrush="Black">
+                <TextBox Text="{Binding Path=D, Mode=TwoWay, UpdateSourceTrigger=LostFocus  }" FontSize="12"
+                     FontWeight="Normal" Height="16" BorderThickness="0"/>
+            </Border>
+            <Border BorderThickness="1" BorderBrush="Black">
+                <TextBox Text="{Binding Path=Rb, Mode=TwoWay, UpdateSourceTrigger=LostFocus  }" FontSize="12"
+                     FontWeight="Normal" Height="16" BorderThickness="0"/>
+            </Border>
+            <Border BorderThickness="1" BorderBrush="Black">
+                <TextBox Text="{Binding Path=A, Mode=TwoWay, UpdateSourceTrigger=LostFocus  }" FontSize="12"
+                     FontWeight="Normal" Height="16" BorderThickness="0"/>
+            </Border>
+            <Border BorderThickness="1" BorderBrush="Black">
+                <TextBox Text="{Binding Path=B, Mode=TwoWay, UpdateSourceTrigger=LostFocus  }" FontSize="12"
+                     FontWeight="Normal" Height="16" BorderThickness="0"/>
+            </Border>
+            <Border BorderThickness="1" BorderBrush="Black">
+                <TextBox Text="{Binding Path=Triangulation, Mode=TwoWay, UpdateSourceTrigger=LostFocus  }"
+                     FontSize="12" FontWeight="Normal" Height="16" BorderThickness="0"/>
+            </Border>
+            <Border BorderThickness="1" BorderBrush="Black">
+                <TextBox Text="{Binding Path=MultipleX, Mode=TwoWay, UpdateSourceTrigger=LostFocus  }" FontSize="12"
+                     FontWeight="Normal" Height="16" BorderThickness="0"/>
+            </Border>
+            <Border BorderThickness="1" BorderBrush="Black">
+                <TextBox Text="{Binding Path=MultipleY, Mode=TwoWay, UpdateSourceTrigger=LostFocus  }" FontSize="12"
+                     FontWeight="Normal" Height="16" BorderThickness="0"/>
+            </Border>
+            <Border BorderThickness="1" BorderBrush="Black">
+                <TextBox Text="{Binding Path=MultipleZ, Mode=TwoWay, UpdateSourceTrigger=LostFocus  }" FontSize="12"
+                     FontWeight="Normal" Height="16" BorderThickness="0"/>
+            </Border>
+            <Border BorderThickness="1" BorderBrush="Black">
+                <TextBox Text="{Binding Path=AnchorCount, Mode=TwoWay, UpdateSourceTrigger=LostFocus  }" FontSize="12"
+                     FontWeight="Normal" Height="16" BorderThickness="0"/>
+            </Border>
         </StackPanel>
         <Button Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="4" x:Name="ButtonCoordinate" MinWidth="300" Height="30"
                 HorizontalAlignment="Stretch" Content="Добавить поля для ввода координат анкеров"
@@ -113,8 +171,6 @@
                 <TextBlock  Text="Координаты по Y" FontSize="10" FontWeight="Normal"
                            HorizontalAlignment="Center" />
             </Border>
-            
-            
             <ScrollViewer Grid.Row="1" Grid.Column="0" VerticalScrollBarVisibility="Auto" HorizontalAlignment="Stretch">
                 <ContentControl Content="{Binding NumberCoordinatesStack}" />
             </ScrollViewer>
@@ -125,6 +181,6 @@
                 <ContentControl Content="{Binding YCoordinatesStack}" />
             </ScrollViewer>
         </Grid>
-        
+
     </Grid>
 </UserControl>

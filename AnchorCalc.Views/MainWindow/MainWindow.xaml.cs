@@ -17,7 +17,7 @@ public partial class MainWindow : IMainWindow
 
         SurfaceProperties.DataContext = mainWindowSurfacePlotViewModelViewModel;
         SurfacePlot.DataContext = mainWindowSurfacePlotViewModelViewModel;
-
+        CalculationOutput.DataContext = mainWindowSurfacePlotViewModelViewModel;
 
     }
 }

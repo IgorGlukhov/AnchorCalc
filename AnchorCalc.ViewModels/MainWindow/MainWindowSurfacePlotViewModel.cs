@@ -7,7 +7,6 @@ using System.Windows.Media.Media3D;
 using AnchorCalc.Infrastructure.Calc;
 using AnchorCalc.ViewModels.Commands;
 using AnchorCalc.ViewModels.Plotters;
-using HelixToolkit.Wpf;
 
 namespace AnchorCalc.ViewModels.MainWindow;
 
@@ -15,6 +14,8 @@ public class MainWindowSurfacePlotViewModel : ViewModel, IMainWindowSurfacePlotV
 {
     private readonly Command _addCoordinateContainersCommand;
     private readonly Command _enterPropertiesCommand;
+    private readonly List<TextBox> _listTextBoxX = new();
+    private readonly List<TextBox> _listTextBoxY = new();
     private double _a = 300;
 
     private int _anchorCount = 4;
@@ -27,8 +28,6 @@ public class MainWindowSurfacePlotViewModel : ViewModel, IMainWindowSurfacePlotV
     private double _e1 = 0.0015;
 
     private double _h = 100;
-    private readonly List<TextBox> _listTextBoxX = new();
-    private readonly List<TextBox> _listTextBoxY = new();
 
     private int _multipleX = 1000;
 
@@ -368,7 +367,13 @@ public class MainWindowSurfacePlotViewModel : ViewModel, IMainWindowSurfacePlotV
 
         for (var i = 0; i < AnchorCount; i++)
         {
-            var textBoxX = new TextBox();
+            var textBoxX = new TextBox
+            {
+                Height = 18,
+                BorderBrush = new SolidColorBrush(Colors.Black),
+                BorderThickness = new Thickness(1),
+                Background = new SolidColorBrush(Colors.White)
+            };
             if (Zsx.GetLength(1) > i) textBoxX.Text = Zsx[0, i].ToString(CultureInfo.CurrentCulture);
             _listTextBoxX.Add(textBoxX);
             XCoordinatesStack.Children.Add(textBoxX);
@@ -376,7 +381,13 @@ public class MainWindowSurfacePlotViewModel : ViewModel, IMainWindowSurfacePlotV
 
         for (var i = 0; i < AnchorCount; i++)
         {
-            var textBoxY = new TextBox();
+            var textBoxY = new TextBox
+            {
+                Height = 18,
+                BorderBrush = new SolidColorBrush(Colors.Black),
+                BorderThickness = new Thickness(1),
+                Background = new SolidColorBrush(Colors.White)
+            };
             if (Zsy.GetLength(1) > i) textBoxY.Text = Zsy[0, i].ToString(CultureInfo.CurrentCulture);
             _listTextBoxY.Add(textBoxY);
             YCoordinatesStack.Children.Add(textBoxY);
@@ -387,16 +398,19 @@ public class MainWindowSurfacePlotViewModel : ViewModel, IMainWindowSurfacePlotV
             var border = new Border
             {
                 BorderThickness = new Thickness(1),
-                BorderBrush = new SolidColorBrush(Colors.Black)
+                BorderBrush = new SolidColorBrush(Colors.Black),
+                Background = new SolidColorBrush(Colors.White)
             };
             var textBoxNumber = new TextBlock
             {
-                Text = (i + 1).ToString()
+                Text = (i + 1).ToString(),
+                Height = 16,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                Background = new SolidColorBrush(Colors.White)
             };
             border.Child = textBoxNumber;
             NumberCoordinatesStack.Children.Add(border);
         }
-
     }
 
     private void EnterProperties()

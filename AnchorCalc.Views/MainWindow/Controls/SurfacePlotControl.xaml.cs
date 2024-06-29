@@ -24,7 +24,9 @@ namespace AnchorCalc.Views.MainWindow.Controls
         public SurfacePlotControl()
         {
             InitializeComponent();
+            
             Viewport.ZoomExtentsGesture = new KeyGesture(Key.Space);
+
         }
     }
 }

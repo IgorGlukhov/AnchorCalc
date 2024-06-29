@@ -16,14 +16,13 @@ using System.Windows.Shapes;
 namespace AnchorCalc.Views.MainWindow.Controls
 {
     /// <summary>
-    /// Interaction logic for SurfacePropertiesControl.xaml
+    /// Interaction logic for CalculationOutputControl.xaml
     /// </summary>
-    public partial class SurfacePropertiesControl : UserControl
+    public partial class CalculationOutputControl : UserControl
     {
-        public SurfacePropertiesControl()
+        public CalculationOutputControl()
         {
             InitializeComponent();
         }
-
     }
 }

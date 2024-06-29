@@ -97,8 +97,7 @@ public class SurfacePlotter : ModelVisual3D
         for (var i = 0; i < numberOfRows; i++)
         for (var j = 0; j < numberOfColumns; j++)
         {
-            double tc;
-            tc = (DataPoints[i, j].Z - minZ) / (maxZ - minZ);
+            double tc = (DataPoints[i, j].Z - minZ) / (maxZ - minZ);
             textureCoordinates[i, j] = new Point(tc, tc);
         }
 

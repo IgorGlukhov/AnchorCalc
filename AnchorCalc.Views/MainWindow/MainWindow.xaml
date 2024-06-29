@@ -22,10 +22,12 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200*" />
+            <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="400*" />
+            <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="200*" />
         </Grid.ColumnDefinitions>
-        <Menu Grid.Row="0">
+        <Menu Grid.Row="0" Grid.ColumnSpan="5" Grid.Column="0">
             <MenuItem Header="File">
                 <MenuItem Header="Exit" Command="{Binding MenuViewModel.CloseMainWindowCommand}" />
             </MenuItem>
@@ -35,8 +37,10 @@
         </Menu>
         <controls:SurfacePropertiesControl Grid.Row="1" Grid.Column="0" x:Name="SurfaceProperties" />
         <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Grid.RowSpan="3" Grid.Row="0" />
-        <controls:SurfacePlotControl Grid.Row="1" Grid.Column="1" x:Name="SurfacePlot" />
-        <StatusBar Grid.Row="2" Grid.Column="0">
+        <controls:SurfacePlotControl Grid.Row="1" Grid.Column="2" x:Name="SurfacePlot"/>
+        <GridSplitter Grid.Column="3" HorizontalAlignment="Stretch" Grid.RowSpan="3" Grid.Row="0" />
+        <controls:CalculationOutputControl Grid.Row="1" Grid.Column="4" x:Name="CalculationOutput" />
+        <StatusBar Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="5">
             <StatusBarItem Content="{Binding StatusBarViewModel.Version}" />
         </StatusBar>
     </Grid>
