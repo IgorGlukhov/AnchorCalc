@@ -2,16 +2,13 @@
 
 namespace AnchorCalc.ViewModels.MainWindow;
 
-public class MainWindowStatusBarViewModel : ViewModel, IMainWindowStatusBarViewModel
+public class MainWindowStatusBarViewModel(IApplicationVersionProvider applicationVersionProvider)
+    : ViewModel, IMainWindowStatusBarViewModel
 {
-    public MainWindowStatusBarViewModel(IApplicationVersionProvider applicationVersionProvider)
-    {
-        Version = $"Version {applicationVersionProvider.Version.ToString(3)}";
-    }
-
-    public string Version { get; }
+    public string Version { get; } = $"Version {applicationVersionProvider.Version.ToString(3)}";
 
     public void Dispose()
     {
+        GC.SuppressFinalize(this);
     }
 }

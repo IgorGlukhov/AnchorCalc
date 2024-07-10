@@ -47,5 +47,6 @@ public class Bootstrapper : IDisposable
     {
         _mainWindowViewModel?.Dispose();
         _container.Dispose();
+        GC.SuppressFinalize(this);
     }
 }

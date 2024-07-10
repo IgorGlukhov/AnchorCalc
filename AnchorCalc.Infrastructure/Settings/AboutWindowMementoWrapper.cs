@@ -3,11 +3,8 @@ using AnchorCalc.Infrastructure.Common;
 
 namespace AnchorCalc.Infrastructure.Settings;
 
-internal class AboutWindowMementoWrapper : WindowMementoWrapper<AboutWindowMemento>, IAboutWindowMementoWrapper
+internal class AboutWindowMementoWrapper(IPathService pathService)
+    : WindowMementoWrapper<AboutWindowMemento>(pathService), IAboutWindowMementoWrapper
 {
-    public AboutWindowMementoWrapper(IPathService pathService) : base(pathService)
-    {
-    }
-
     protected override string MementoName => "AboutWindowMemento";
 }

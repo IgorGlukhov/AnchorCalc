@@ -9,15 +9,10 @@ namespace AnchorCalc.Views.MainWindow;
 
 public partial class MainWindow : IMainWindow
 {
-    public MainWindow(IMainWindowSurfacePlotViewModel mainWindowSurfacePlotViewModelViewModel,
+    public MainWindow(
         IMainWindowViewModel mainWindowViewModel)
     {
         InitializeComponent();
         DataContext = mainWindowViewModel;
-
-        SurfaceProperties.DataContext = mainWindowSurfacePlotViewModelViewModel;
-        SurfacePlot.DataContext = mainWindowSurfacePlotViewModelViewModel;
-        CalculationOutput.DataContext = mainWindowSurfacePlotViewModelViewModel;
-
     }
 }

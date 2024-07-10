@@ -15,15 +15,11 @@ using System.Windows.Shapes;
 
 namespace AnchorCalc.Views.MainWindow.Controls
 {
-    /// <summary>
-    /// Interaction logic for SurfacePropertiesControl.xaml
-    /// </summary>
     public partial class SurfacePropertiesControl : UserControl
     {
         public SurfacePropertiesControl()
         {
             InitializeComponent();
         }
-
     }
 }

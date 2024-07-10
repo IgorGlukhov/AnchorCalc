@@ -17,6 +17,19 @@ public class SurfacePlotter : ModelVisual3D
     public SurfacePlotter()
     {
         _modelContainer = new ModelVisual3D();
+        var fakeModel3DGroup = new Model3DGroup();
+        var fakeGeometryModel3D = new GeometryModel3D
+        {
+            Geometry = new MeshGeometry3D
+            {
+                Positions =
+                [
+                    new Point3D(200, 0, 0), new Point3D(0, 200, 0), new Point3D(-200, 0, 0), new Point3D(0, -200, 0)
+                ]
+            }
+        };
+        fakeModel3DGroup.Children.Add(fakeGeometryModel3D);
+        _modelContainer.Content = fakeModel3DGroup;
         Children.Add(_modelContainer);
     }
 
@@ -27,12 +40,9 @@ public class SurfacePlotter : ModelVisual3D
         set => SetValue(DataPointsProperty, value);
     }
 
+
     // Инициализация кисти для отображения 3д поверхности.
-    public Brush SurfaceBrush
-    {
-        get => BrushHelper.CreateGradientBrush(Colors.Blue, Colors.Red);
-        set => BrushHelper.CreateGradientBrush(Colors.Blue, Colors.Red);
-    }
+    public static Brush SurfaceBrush => BrushHelper.CreateGradientBrush(Colors.Blue, Colors.Red);
 
     public double IntervalX { get; set; }
     public double IntervalY { get; set; }
@@ -83,9 +93,9 @@ public class SurfacePlotter : ModelVisual3D
             minZ = Math.Min(minZ, z);
         }
 
-        if (maxX == minX) maxX = maxX + 0.01;
-        if (maxZ == minZ) maxZ = maxZ + 0.01;
-        if (maxY == minY) maxY = maxY + 0.01;
+        if (maxX == minX) maxX += 0.01;
+        if (maxZ == minZ) maxZ += 0.01;
+        if (maxY == minY) maxY += 0.01;
         var numberOfXAxisTicks = 10;
         var numberOfYAxisTicks = 10;
         var numberOfZAxisTicks = 5;
@@ -97,7 +107,7 @@ public class SurfacePlotter : ModelVisual3D
         for (var i = 0; i < numberOfRows; i++)
         for (var j = 0; j < numberOfColumns; j++)
         {
-            double tc = (DataPoints[i, j].Z - minZ) / (maxZ - minZ);
+            var tc = (DataPoints[i, j].Z - minZ) / (maxZ - minZ);
             textureCoordinates[i, j] = new Point(tc, tc);
         }
 

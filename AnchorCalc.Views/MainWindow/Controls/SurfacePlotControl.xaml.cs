@@ -12,21 +12,18 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using AnchorCalc.ViewModels.MainWindow;
+using AnchorCalc.Views.Plotters;
 using Xceed.Wpf.AvalonDock.Layout;
 
 namespace AnchorCalc.Views.MainWindow.Controls
 {
-    /// <summary>
-    /// Interaction logic for SurfacePlotControl.xaml
-    /// </summary>
     public partial class SurfacePlotControl : UserControl
     {
         public SurfacePlotControl()
         {
             InitializeComponent();
-            
             Viewport.ZoomExtentsGesture = new KeyGesture(Key.Space);
-
         }
     }
 }

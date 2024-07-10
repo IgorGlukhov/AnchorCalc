@@ -1,269 +1,241 @@
-﻿namespace AnchorCalc.Infrastructure.Calc;
+﻿using System.Collections;
 
-public class Matrix
+namespace AnchorCalc.Infrastructure.Calc;
+
+public class Matrix(double[,] matrix) : IEnumerable
 {
-    public static double[,] TransposeMatrix(double[,] matrix)
+    private readonly double[,] _matrix = matrix;
+    private int Rows => _matrix.GetLength(0);
+    private int Columns => _matrix.GetLength(1);
+
+    public double this[int rowIndex, int columnIndex]
     {
-        var rows = matrix.GetLength(0);
-        var columns = matrix.GetLength(1);
-
-        var result = new double[columns, rows];
-
-        for (var c = 0; c < columns; c++)
-        for (var r = 0; r < rows; r++)
-            result[c, r] = matrix[r, c];
-        return result;
-    }
-
-    public static double MaxNumberInMatrix(double[,] matrix)
-    {
-        var rows = matrix.GetLength(0);
-        var columns = matrix.GetLength(1);
-
-        double result = 0;
-
-        for (var c = 0; c < columns; c++)
-        for (var r = 0; r < rows; r++)
-            if (Math.Abs(matrix[r, c]) > result)
-                result = Math.Abs(matrix[r, c]);
-        return result;
-    }
-
-    public static double[,] DivideMatrixByNumber(double[,] matrix, double divider)
-    {
-        var rows = matrix.GetLength(0);
-        var columns = matrix.GetLength(1);
-
-        var result = new double[rows, columns];
-
-        for (var r = 0; r < rows; r++)
-        for (var c = 0; c < columns; c++)
-            result[r, c] = matrix[r, c] / divider;
-        return result;
-    }
-
-    public static double[,] DivideMatrixByMatrix(double[,] matrix, double[,] divider)
-    {
-        var rows = matrix.GetLength(0);
-        var columns = matrix.GetLength(1);
-
-        var result = new double[rows, columns];
-
-        for (var r = 0; r < rows; r++)
-        for (var c = 0; c < columns; c++)
-            result[r, c] = matrix[r, c] / divider[r, c];
-        return result;
-    }
-
-    public static double[,] FoldMatrixByNumber(double[,] matrix, double folder)
-    {
-        var rows = matrix.GetLength(0);
-        var columns = matrix.GetLength(1);
-
-        var result = new double[rows, columns];
-
-        for (var r = 0; r < rows; r++)
-        for (var c = 0; c < columns; c++)
-            result[r, c] = matrix[r, c] + folder;
-        return result;
-    }
-
-    public static double[,] FoldMatrixByMatrix(double[,] matrix, double[,] folder)
-    {
-        var rows = matrix.GetLength(0);
-        var columns = matrix.GetLength(1);
-
-        var result = new double[rows, columns];
-
-        for (var r = 0; r < rows; r++)
-        for (var c = 0; c < columns; c++)
-            result[r, c] = matrix[r, c] + folder[r, c];
-        return result;
-    }
-
-    public static double[,] DiffMatrixByMatrix(double[,] matrix, double[,] differ)
-    {
-        var rows = matrix.GetLength(0);
-        var columns = matrix.GetLength(1);
-
-        var result = new double[rows, columns];
-
-        for (var r = 0; r < rows; r++)
-        for (var c = 0; c < columns; c++)
-            result[r, c] = matrix[r, c] - differ[r, c];
-        return result;
-    }
-
-    public static double[] MultiplyVectorByNumber(double[] vector, double multiplier)
-    {
-        var result = new double[vector.GetLength(0)];
-        for (var r = 0; r < vector.GetLength(0); r++) result[r] = vector[r] * multiplier;
-        return result;
-    }
-
-    public static double[,] MultiplyMatrixByNumber(double[,] matrix, double multiplier)
-    {
-        var rows = matrix.GetLength(0);
-        var columns = matrix.GetLength(1);
-
-        var result = new double[rows, columns];
-
-        for (var r = 0; r < rows; r++)
-        for (var c = 0; c < columns; c++)
-            result[r, c] = matrix[r, c] * multiplier;
-        return result;
-    }
-
-    public static double[,] MultiplyMatrixByMatrix(double[,] matrix, double[,] multiplier)
-    {
-        var rows = matrix.GetLength(0);
-        var columns = matrix.GetLength(1);
-
-        var result = new double[rows, columns];
-
-        for (var r = 0; r < rows; r++)
-        for (var c = 0; c < columns; c++)
-            result[r, c] = matrix[r, c] * multiplier[r, c];
-        return result;
-    }
-
-    public static double[,] PowMatrixByNumber(double[,] matrix, double power)
-    {
-        var rows = matrix.GetLength(0);
-        var columns = matrix.GetLength(1);
-
-        var result = new double[rows, columns];
-
-        for (var r = 0; r < rows; r++)
-        for (var c = 0; c < columns; c++)
-            result[r, c] = Math.Pow(matrix[r, c], power);
-        return result;
-    }
-
-    public static double[,] AbsMatrix(double[,] matrix)
-    {
-        var rows = matrix.GetLength(0);
-        var columns = matrix.GetLength(1);
-
-        var result = new double[rows, columns];
-
-        for (var r = 0; r < rows; r++)
-        for (var c = 0; c < columns; c++)
-            result[r, c] = Math.Abs(matrix[r, c]);
-        return result;
-    }
-
-    public static double[,] SolutionMatrix(double[,] leftmatrix, double[,] rightmatrix)
-    {
-        var rows = leftmatrix.GetLength(0);
-
-        var result = new double[rows, 1];
-
-        for (var r = 0; r < rows; r++)
+        get
         {
-            double sum = 0;
-            for (var c = 0; c < rows; c++) sum +=leftmatrix[r, c] * rightmatrix[c, 0];
-            result[r, 0] = sum;
+            if (rowIndex < 0 || rowIndex >= Rows)
+                throw new ArgumentOutOfRangeException(nameof(rowIndex));
+            if (columnIndex < 0 || columnIndex >= Columns)
+                throw new ArgumentOutOfRangeException(nameof(columnIndex));
+            return _matrix[rowIndex, columnIndex];
         }
-
-        return result;
-    }
-
-    public static double[] MatrixSumOfElementsInRows(double[,] matrix)
-    {
-        var rows = matrix.GetLength(0);
-        var columns = matrix.GetLength(1);
-
-        var result = new double[columns];
-        double sum;
-        for (var c = 0; c < columns; c++)
+        set
         {
-            sum = 0;
-            for (var r = 0; r < rows; r++) sum += matrix[r, c];
-            result[c] = sum;
+            if (rowIndex < 0 || rowIndex >= Rows)
+                throw new ArgumentOutOfRangeException(nameof(rowIndex));
+            if (columnIndex < 0 || columnIndex >= Columns)
+                throw new ArgumentOutOfRangeException(nameof(columnIndex));
+            _matrix[rowIndex, columnIndex] = value;
         }
+    }
+
+    public IEnumerator GetEnumerator()
+    {
+        return _matrix.GetEnumerator();
+    }
+
+    public static implicit operator Matrix(double[,] matrix)
+    {
+        return new Matrix(matrix);
+    }
+
+    public static implicit operator double[,](Matrix matrix)
+    {
+        return matrix._matrix;
+    }
+
+    public static Matrix operator /(Matrix matrix, Matrix divider)
+    {
+        var result = new double[matrix.Rows, matrix.Columns];
+
+        for (var r = 0; r < matrix.Rows; r++)
+        for (var c = 0; c < matrix.Columns; c++)
+            result[r, c] = matrix._matrix[r, c] / divider._matrix[r, c];
+        return result;
+    }
+
+    public static Matrix operator /(Matrix matrix, double divider)
+    {
+        var result = new double[matrix.Rows, matrix.Columns];
+
+        for (var r = 0; r < matrix.Rows; r++)
+        for (var c = 0; c < matrix.Columns; c++)
+            result[r, c] = matrix._matrix[r, c] / divider;
+        return result;
+    }
+
+    public static Matrix operator +(Matrix matrix, double folder)
+    {
+        var result = new double[matrix.Rows, matrix.Columns];
+
+        for (var r = 0; r < matrix.Rows; r++)
+        for (var c = 0; c < matrix.Columns; c++)
+            result[r, c] = matrix._matrix[r, c] + folder;
+        return result;
+    }
+
+    public static Matrix operator +(Matrix matrix, Matrix folder)
+    {
+        var result = new double[matrix.Rows, matrix.Columns];
+
+        for (var r = 0; r < matrix.Rows; r++)
+        for (var c = 0; c < matrix.Columns; c++)
+            result[r, c] = matrix._matrix[r, c] + folder._matrix[r, c];
+        return result;
+    }
+
+    public static Matrix operator -(Matrix matrix, Matrix differ)
+    {
+        var result = new double[matrix.Rows, matrix.Columns];
+
+        for (var r = 0; r < matrix.Rows; r++)
+        for (var c = 0; c < matrix.Columns; c++)
+            result[r, c] = matrix._matrix[r, c] - differ._matrix[r, c];
+        return result;
+    }
+
+
+    public static Matrix operator *(Matrix matrix, Matrix multiplier)
+    {
+        var result = new double[matrix.Rows, matrix.Columns];
+
+        for (var r = 0; r < matrix.Rows; r++)
+        for (var c = 0; c < matrix.Columns; c++)
+            result[r, c] = matrix._matrix[r, c] * multiplier._matrix[r, c];
+        return result;
+    }
+
+    public static Matrix operator *(Matrix matrix, double multiplier)
+    {
+        var result = new double[matrix.Rows, matrix.Columns];
+
+        for (var r = 0; r < matrix.Rows; r++)
+        for (var c = 0; c < matrix.Columns; c++)
+            result[r, c] = matrix._matrix[r, c] * multiplier;
+        return result;
+    }
+
+    public Matrix Transpose()
+    {
+        var result = new double[Columns, Rows];
+
+        for (var c = 0; c < Columns; c++)
+        for (var r = 0; r < Rows; r++)
+            result[c, r] = _matrix[r, c];
 
         return result;
     }
 
-    public static double VectorSumOfElements(double[] vector)
+    public double Max()
     {
-        var numbers = vector.GetLength(0);
         double result = 0;
-        for (var n = 0; n < numbers; n++) result += vector[n];
+        for (var r = 0; r < Rows; r++)
+        for (var c = 0; c < Columns; c++)
+            if (Math.Abs(_matrix[r, c]) > result)
+                result = Math.Abs(_matrix[r, c]);
+
         return result;
     }
 
-    public static double[,] InverseMatrix(double[,] matrix)
+    public Matrix Abs()
     {
-        var n = matrix.GetLength(0);
-        var det = DeterminantOfMatrix(matrix);
-        if (det == 0)
-            throw new DivideByZeroException("Определитель матрицы равен нулю.");
-        var adjugated = AdjugateOfMatrix(matrix);
-        var transposed = TransposeMatrix(adjugated);
-        for (var i = 0; i < n; i++)
-        for (var j = 0; j < n; j++)
-            transposed[i, j] = transposed[i, j] / det;
-        return transposed;
+        var result = new double[Rows, Columns];
+
+        for (var r = 0; r < Rows; r++)
+        for (var c = 0; c < Columns; c++)
+            result[r, c] = Math.Abs(_matrix[r, c]);
+
+        return result;
     }
 
-    public static double DeterminantOfMatrix(double[,] matrix)
+    public Matrix Solution(double[,] rightMatrix)
     {
-        if (matrix == null || matrix.GetLength(0) != matrix.GetLength(1))
+        var result = new double[Rows, 1];
+
+        for (var r = 0; r < Rows; r++)
+        for (var c = 0; c < Columns; c++)
+            result[r, 0] += _matrix[r, c] * rightMatrix[c, 0];
+
+        return result;
+    }
+
+    public double[] Sum()
+    {
+        var result = new double[Rows];
+        for (var r = 0; r < Rows; r++)
+        for (var c = 0; c < Columns; c++)
+            result[r] += _matrix[r, c];
+
+        return result;
+    }
+
+
+    public Matrix Inverse()
+    {
+        var determinant = Determinant();
+        if (determinant == 0)
+            throw new ArgumentException("Определитель матрицы равен нулю.");
+        var result = Addition().Transpose();
+        for (var r = 0; r < Rows; r++)
+        for (var c = 0; c < Columns; c++)
+            result._matrix[r, c] /= determinant;
+        return result;
+    }
+
+    public double Determinant()
+    {
+        if (_matrix == null || Rows != Columns)
             throw new ArgumentException("Matrix must be a square matrix.");
-        var n = matrix.GetLength(0);
-        if (n == 1)
-            return matrix[0, 0]; // Определитель единичной матрицы равен элементу на главной диагонали
-        if (n == 2)
-            return matrix[0, 0] * matrix[1, 1] - matrix[0, 1] * matrix[1, 0]; // Определитель матрицы 2x2
-        if (n == 3)
-            return matrix[0, 0] * matrix[1, 1] * matrix[2, 2] + matrix[0, 1] * matrix[1, 2] * matrix[2, 0] +
-                   matrix[0, 2] * matrix[1, 0] * matrix[2, 1]
-                   - matrix[0, 2] * matrix[1, 1] * matrix[2, 0] - matrix[0, 1] * matrix[1, 0] * matrix[2, 2] -
-                   matrix[0, 0] * matrix[1, 2] * matrix[2, 1]; // Определитель матрицы 3x3
-        throw new ArgumentException("Rank of matrix must be <=3.");
+        return Rows switch
+        {
+            1 => _matrix[0, 0],
+            2 => _matrix[0, 0] * _matrix[1, 1] - _matrix[0, 1] * _matrix[1, 0],
+            3 => _matrix[0, 0] * _matrix[1, 1] * _matrix[2, 2] + _matrix[0, 1] * _matrix[1, 2] * _matrix[2, 0] +
+                 _matrix[0, 2] * _matrix[1, 0] * _matrix[2, 1] - _matrix[0, 2] * _matrix[1, 1] * _matrix[2, 0] -
+                 _matrix[0, 1] * _matrix[1, 0] * _matrix[2, 2] - _matrix[0, 0] * _matrix[1, 2] * _matrix[2, 1],
+            _ => throw new ArgumentException("Rank of matrix must be <= 3.")
+        };
     }
 
-    private static double DeterminantOfSubmatrix(double[,] matrix, int k, int p)
+    private double SubDeterminant(int currentRows, int currentColumns)
     {
-        var n = matrix.GetLength(0);
-        var counti = 0;
-        var submatrix = new double[n - 1, n - 1];
-        for (var i = 0; i < n; i++)
+        var subRows = 0;
+        var subMatrix = new double[Rows - 1, Columns - 1];
+        for (var r = 0; r < Rows; r++)
         {
-            var countj = 0;
-            if (i != k)
+            var subColumns = 0;
+            if (r != currentRows)
             {
-                for (var j = 0; j < n; j++)
-                    if (j != p)
+                for (var c = 0; c < Columns; c++)
+                    if (c != currentColumns)
                     {
-                        submatrix[counti, countj] = matrix[i, j];
-                        countj++;
+                        subMatrix[subRows, subColumns] = _matrix[r, c];
+                        subColumns++;
                     }
 
-                counti++;
+                subRows++;
             }
         }
 
-        return submatrix[0, 0] * submatrix[1, 1] - submatrix[0, 1] * submatrix[1, 0];
+        return subMatrix[0, 0] * subMatrix[1, 1] - subMatrix[0, 1] * subMatrix[1, 0];
     }
 
-    public static double[,] AdjugateOfMatrix(double[,] matrix)
+    public Matrix Addition()
     {
-        if (matrix == null || matrix.GetLength(0) != matrix.GetLength(1))
-            throw new ArgumentException("Matrix must be a square matrix.");
-        var n = matrix.GetLength(0);
-        var adjugate = new double[n, n];
+        var addition = new double[Rows, Columns];
         var minor = -1;
-        for (var i = 0; i < n; i++)
-        for (var j = 0; j < n; j++)
+        for (var r = 0; r < Rows; r++)
+        for (var c = 0; c < Columns; c++)
         {
             // Вычисляем определитель для каждого элемента матрицы дополнений
-            minor = -1 * minor;
-            adjugate[i, j] = DeterminantOfSubmatrix(matrix, i, j) * minor;
+            minor = -minor;
+            addition[r, c] = SubDeterminant(r, c) * minor;
         }
 
-        return adjugate;
+        return addition;
+    }
+
+    public int GetLength(int dimension)
+    {
+        return _matrix.GetLength(dimension);
     }
 }

@@ -27,7 +27,7 @@ public class MainWindowViewModel : WindowViewModel<IMainWindowMementoWrapper>, I
     public IMainWindowSurfacePlotViewModel SurfacePlotViewModel { get; }
     public IMainWindowStatusBarViewModel StatusBarViewModel { get; }
 
-    public string Title => "AnchorCalc";
+    public static string Title => "AnchorCalc";
 
 
     public override void WindowClosing()
@@ -46,5 +46,6 @@ public class MainWindowViewModel : WindowViewModel<IMainWindowMementoWrapper>, I
     {
         MenuViewModel.MainWindowClosingRequested -= OnMainWindowClosingRequested;
         StatusBarViewModel.Dispose();
+        GC.SuppressFinalize(this);
     }
 }

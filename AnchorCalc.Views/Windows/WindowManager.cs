@@ -4,16 +4,10 @@ using AnchorCalc.Views.Factories;
 
 namespace AnchorCalc.Views.Windows;
 
-internal class WindowManager : IWindowManager
+internal class WindowManager(IWindowFactory windowFactory) : IWindowManager
 {
-    private readonly Dictionary<IWindowViewModel, IWindow> _viewModelToWindowMap = new();
-    private readonly IWindowFactory _windowFactory;
-    private readonly Dictionary<IWindow, IWindowViewModel> _windowToViewModelMap = new();
-
-    public WindowManager(IWindowFactory windowFactory)
-    {
-        _windowFactory = windowFactory;
-    }
+    private readonly Dictionary<IWindowViewModel, IWindow> _viewModelToWindowMap = [];
+    private readonly Dictionary<IWindow, IWindowViewModel> _windowToViewModelMap = [];
 
     public IWindow Show<TWindowViewModel>(TWindowViewModel viewModel)
         where TWindowViewModel : IWindowViewModel
@@ -24,7 +18,7 @@ internal class WindowManager : IWindowManager
             return window;
         }
 
-        window = _windowFactory.Create(viewModel);
+        window = windowFactory.Create(viewModel);
         _viewModelToWindowMap.Add(viewModel, window);
         _windowToViewModelMap.Add(window, viewModel);
         window.Closing += OnWindowClosing;

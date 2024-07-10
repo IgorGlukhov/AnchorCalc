@@ -14,8 +14,8 @@ public class MainWindowSurfacePlotViewModel : ViewModel, IMainWindowSurfacePlotV
 {
     private readonly Command _addCoordinateContainersCommand;
     private readonly Command _enterPropertiesCommand;
-    private readonly List<TextBox> _listTextBoxX = new();
-    private readonly List<TextBox> _listTextBoxY = new();
+    private readonly List<TextBox> _listTextBoxX = [];
+    private readonly List<TextBox> _listTextBoxY = [];
     private double _a = 300;
 
     private int _anchorCount = 4;
@@ -41,6 +41,8 @@ public class MainWindowSurfacePlotViewModel : ViewModel, IMainWindowSurfacePlotV
 
     private double _n = 10;
     private StackPanel _numberCoordinatesStack = new();
+    private StackPanel _numberAnchorStack = new();
+    private StackPanel _anchorForceStack = new();
 
     private double _rb = 17;
 
@@ -53,6 +55,7 @@ public class MainWindowSurfacePlotViewModel : ViewModel, IMainWindowSurfacePlotV
     private string _xAxisLabel = "X";
     private StackPanel _xCoordinatesStack = new();
     private double[,] _xData2DArray = new double[1, 1];
+    private double[,] _forceDataArray = new double[1, 1];
 
     private string _yAxisLabel = "Y";
     private StackPanel _yCoordinatesStack = new();
@@ -66,8 +69,7 @@ public class MainWindowSurfacePlotViewModel : ViewModel, IMainWindowSurfacePlotV
     public MainWindowSurfacePlotViewModel()
     {
         _enterPropertiesCommand = new Command(EnterProperties);
-        _addCoordinateContainersCommand = new Command(AddCoordinateContainers);
-        AddCoordinateContainers();
+        _addCoordinateContainersCommand = new Command(AddAnchorCoordinateContainers);
         ModelChange();
     }
 
@@ -80,7 +82,24 @@ public class MainWindowSurfacePlotViewModel : ViewModel, IMainWindowSurfacePlotV
             OnPropertyChanged();
         }
     }
-
+    public StackPanel NumberAnchorStack
+    {
+        get => _numberAnchorStack;
+        private set
+        {
+            _numberAnchorStack = value;
+            OnPropertyChanged();
+        }
+    }
+    public StackPanel AnchorForceStack
+    {
+        get => _anchorForceStack;
+        private set
+        {
+            _anchorForceStack = value;
+            OnPropertyChanged();
+        }
+    }
     public StackPanel XCoordinatesStack
     {
         get => _xCoordinatesStack;
@@ -110,6 +129,15 @@ public class MainWindowSurfacePlotViewModel : ViewModel, IMainWindowSurfacePlotV
         private set
         {
             _xData2DArray = value;
+            OnPropertyChanged();
+        }
+    }
+    public double[,] ForceDataArray
+    {
+        get => _forceDataArray;
+        private set
+        {
+            _forceDataArray = value;
             OnPropertyChanged();
         }
     }
@@ -357,40 +385,54 @@ public class MainWindowSurfacePlotViewModel : ViewModel, IMainWindowSurfacePlotV
         }
     }
 
-    private void AddCoordinateContainers()
+    private void AddAnchorCoordinateContainers()
     {
         NumberCoordinatesStack = new StackPanel();
         XCoordinatesStack = new StackPanel();
         YCoordinatesStack = new StackPanel();
+        NumberAnchorStack = new StackPanel();
+        AnchorForceStack = new StackPanel();
         _listTextBoxX.Clear();
         _listTextBoxY.Clear();
 
         for (var i = 0; i < AnchorCount; i++)
         {
-            var textBoxX = new TextBox
+            var border = new Border
             {
-                Height = 18,
-                BorderBrush = new SolidColorBrush(Colors.Black),
                 BorderThickness = new Thickness(1),
+                BorderBrush = new SolidColorBrush(Colors.Black),
                 Background = new SolidColorBrush(Colors.White)
             };
+            var textBoxX = new TextBox
+            {
+                Height = 16,
+                BorderThickness = new Thickness(0),
+                Background = new SolidColorBrush(Colors.White)
+            };
+            border.Child = textBoxX;
             if (Zsx.GetLength(1) > i) textBoxX.Text = Zsx[0, i].ToString(CultureInfo.CurrentCulture);
             _listTextBoxX.Add(textBoxX);
-            XCoordinatesStack.Children.Add(textBoxX);
+            XCoordinatesStack.Children.Add(border);
         }
 
         for (var i = 0; i < AnchorCount; i++)
         {
-            var textBoxY = new TextBox
+            var border = new Border
             {
-                Height = 18,
-                BorderBrush = new SolidColorBrush(Colors.Black),
                 BorderThickness = new Thickness(1),
+                BorderBrush = new SolidColorBrush(Colors.Black),
                 Background = new SolidColorBrush(Colors.White)
             };
+            var textBoxY = new TextBox
+            {
+                Height = 16,
+                BorderThickness = new Thickness(0),
+                Background = new SolidColorBrush(Colors.White)
+            };
+            border.Child = textBoxY;
             if (Zsy.GetLength(1) > i) textBoxY.Text = Zsy[0, i].ToString(CultureInfo.CurrentCulture);
             _listTextBoxY.Add(textBoxY);
-            YCoordinatesStack.Children.Add(textBoxY);
+            YCoordinatesStack.Children.Add(border);
         }
 
         for (var i = 0; i < AnchorCount; i++)
@@ -411,8 +453,43 @@ public class MainWindowSurfacePlotViewModel : ViewModel, IMainWindowSurfacePlotV
             border.Child = textBoxNumber;
             NumberCoordinatesStack.Children.Add(border);
         }
-    }
+        for (var i = 0; i < AnchorCount; i++)
+        {
+            var border = new Border
+            {
+                BorderThickness = new Thickness(1),
+                BorderBrush = new SolidColorBrush(Colors.Black),
+                Background = new SolidColorBrush(Colors.White)
+            };
+            var textBlock = new TextBlock
+            {
+                Height = 16,
+                Background = new SolidColorBrush(Colors.White)
+            };
+            border.Child = textBlock;
+            if (ForceDataArray.GetLength(1) > i) textBlock.Text = $"{ForceDataArray[0, i]:0.00}";
+            AnchorForceStack.Children.Add(border);
+        }
 
+        for (var i = 0; i < AnchorCount; i++)
+        {
+            var border = new Border
+            {
+                BorderThickness = new Thickness(1),
+                BorderBrush = new SolidColorBrush(Colors.Black),
+                Background = new SolidColorBrush(Colors.White)
+            };
+            var textBoxNumber = new TextBlock
+            {
+                Text = (i + 1).ToString(),
+                Height = 16,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                Background = new SolidColorBrush(Colors.White)
+            };
+            border.Child = textBoxNumber;
+            NumberAnchorStack.Children.Add(border);
+        }
+    }
     private void EnterProperties()
     {
         if (_listTextBoxX.Count > 0 && _listTextBoxY.Count > 0)
@@ -440,7 +517,9 @@ public class MainWindowSurfacePlotViewModel : ViewModel, IMainWindowSurfacePlotV
         ZData2DArray = calc.Zbz;
         XData2DArray = calc.Zbx;
         YData2DArray = calc.Zby;
+        ForceDataArray = calc.Nan;
         DataPoints = PlotFromArray.Plot(XData2DArray, YData2DArray, ZData2DArray);
+        AddAnchorCoordinateContainers();
     }
 
     public void Dispose()

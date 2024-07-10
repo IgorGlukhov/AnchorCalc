@@ -15,7 +15,12 @@ public partial class App
 
     protected override void OnExit(ExitEventArgs e)
     {
-        if (_bootstrapper != null) _bootstrapper.Dispose();
+        if (_bootstrapper == null)
+        {
+        }
+        else
+            _bootstrapper.Dispose();
+
         base.OnExit(e);
     }
 }

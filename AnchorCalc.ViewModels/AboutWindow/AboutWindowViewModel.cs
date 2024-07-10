@@ -4,14 +4,10 @@ using AnchorCalc.ViewModels.MainWindow;
 
 namespace AnchorCalc.ViewModels.AboutWindow;
 
-public class AboutWindowViewModel : WindowViewModel<IAboutWindowMementoWrapper>, IAboutWindowViewModel
+public class AboutWindowViewModel(
+    IAboutWindowMementoWrapper windowMementoWrapper,
+    IApplicationVersionProvider applicationVersionProvider)
+    : WindowViewModel<IAboutWindowMementoWrapper>(windowMementoWrapper), IAboutWindowViewModel
 {
-    public AboutWindowViewModel(IAboutWindowMementoWrapper windowMementoWrapper,
-        IApplicationVersionProvider applicationVersionProvider)
-        : base(windowMementoWrapper)
-    {
-        Version = $"Version {applicationVersionProvider.Version.ToString(3)}";
-    }
-
-    public string Version { get; }
+    public string Version { get; } = $"Version {applicationVersionProvider.Version.ToString(3)}";
 }

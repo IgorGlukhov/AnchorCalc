@@ -35,11 +35,11 @@
                 <MenuItem Header="About" Command="{Binding MenuViewModel.OpenAboutWindowCommand}" />
             </MenuItem>
         </Menu>
-        <controls:SurfacePropertiesControl Grid.Row="1" Grid.Column="0" x:Name="SurfaceProperties" />
+        <controls:SurfacePropertiesControl Grid.Row="1" Grid.Column="0" x:Name="SurfaceProperties"  DataContext="{Binding SurfacePlotViewModel}"/>
         <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Grid.RowSpan="3" Grid.Row="0" />
-        <controls:SurfacePlotControl Grid.Row="1" Grid.Column="2" x:Name="SurfacePlot"/>
+        <controls:SurfacePlotControl Grid.Row="1" Grid.Column="2" x:Name="SurfacePlot" DataContext="{Binding SurfacePlotViewModel}"/>
         <GridSplitter Grid.Column="3" HorizontalAlignment="Stretch" Grid.RowSpan="3" Grid.Row="0" />
-        <controls:CalculationOutputControl Grid.Row="1" Grid.Column="4" x:Name="CalculationOutput" />
+        <controls:CalculationOutputControl Grid.Row="1" Grid.Column="4" x:Name="CalculationOutput" DataContext="{Binding SurfacePlotViewModel}"/>
         <StatusBar Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="5">
             <StatusBarItem Content="{Binding StatusBarViewModel.Version}" />
         </StatusBar>

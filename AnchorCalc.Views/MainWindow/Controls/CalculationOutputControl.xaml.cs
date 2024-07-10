@@ -15,9 +15,6 @@ using System.Windows.Shapes;
 
 namespace AnchorCalc.Views.MainWindow.Controls
 {
-    /// <summary>
-    /// Interaction logic for CalculationOutputControl.xaml
-    /// </summary>
     public partial class CalculationOutputControl : UserControl
     {
         public CalculationOutputControl()

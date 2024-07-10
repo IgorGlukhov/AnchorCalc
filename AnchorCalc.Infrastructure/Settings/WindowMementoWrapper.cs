@@ -4,20 +4,14 @@ using Newtonsoft.Json;
 
 namespace AnchorCalc.Infrastructure.Settings;
 
-internal abstract class WindowMementoWrapper<TMemento> : IWindowMementoWrapperInitializer, IMainWindowMementoWrapper,
+internal abstract class WindowMementoWrapper<TMemento>(IPathService pathService) : IWindowMementoWrapperInitializer,
+    IMainWindowMementoWrapper,
     IDisposable
     where TMemento : WindowMemento, new()
 {
-    private readonly IPathService _pathService;
     private bool _initialized;
     private string _settingsFilePath = string.Empty;
-    private TMemento _windowMemento;
-
-    protected WindowMementoWrapper(IPathService pathService)
-    {
-        _pathService = pathService;
-        _windowMemento = new TMemento();
-    }
+    private TMemento _windowMemento = new();
 
     protected abstract string MementoName { get; }
 
@@ -97,7 +91,7 @@ internal abstract class WindowMementoWrapper<TMemento> : IWindowMementoWrapperIn
             throw new InvalidOperationException($"Wrapper for {nameof(TMemento)} is already initialized");
         _initialized = true;
         const string settingsFolderName = "Settings";
-        var settingsPath = Path.Combine(_pathService.ApplicationFolder, settingsFolderName);
+        var settingsPath = Path.Combine(pathService.ApplicationFolder, settingsFolderName);
         _settingsFilePath = Path.Combine(settingsPath, $"{MementoName}.json");
         Directory.CreateDirectory(settingsPath);
         if (!File.Exists(_settingsFilePath))
