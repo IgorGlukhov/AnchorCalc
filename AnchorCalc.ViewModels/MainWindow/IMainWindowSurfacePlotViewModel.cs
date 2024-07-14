@@ -15,31 +15,23 @@ public interface IMainWindowSurfacePlotViewModel : IDisposable
 
     public bool ShowMiniCoordinates { get; }
 
-    public double N { get; set; }
+    public double Force { get; set; }
 
-    public double Mx { get; set; }
+    public double MomentX { get; set; }
 
-    public double My { get; set; }
+    public double MomentY { get; set; }
 
-    public double Tough { get; set; }
+    public double SealingDepth { get; set; }
 
-    public double H { get; set; }
+    public double Diameter { get; set; }
 
-    public double D { get; set; }
+    public double ConcreteResistance { get; set; }
 
-    public double Rb { get; set; }
+    public double BasePlateWidth { get; set; }
 
-    public double A { get; set; }
-
-    public double B { get; set; }
+    public double BasePlateLength { get; set; }
 
     public int Triangulation { get; set; }
-
-    public int MultipleX { get; set; }
-
-    public int MultipleY { get; set; }
-
-    public int MultipleZ { get; set; }
 
     public int AnchorCount { get; set; }
 }

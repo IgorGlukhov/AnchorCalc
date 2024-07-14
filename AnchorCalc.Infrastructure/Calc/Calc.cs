@@ -1,36 +1,171 @@
-﻿namespace AnchorCalc.Infrastructure.Calc;
+﻿using System;
+
+namespace AnchorCalc.Infrastructure.Calc;
 
 public class Calc
 {
-    public Calc(double nValue, double mxValue, double myValue, double toughValue, double hValue,
-        double diameterValue, double rbValue, double e1Value, double aValue, double bValue, int triangulationValue,
-        double[,] zsxValue, double[,] zsyValue, int multipleXValue, int multipleYValue, int multipleZValue)
+    public Calc(double forceValue, double momentXValue, double momentYValue, double sealingDepthValue,
+        double diameterValue, double concreteResistanceValue, double localDeformationValue, double basePlateWidthValue, double basePlateLengthValue, int triangulationValue,
+        double[,] anchorCoordinatesXValue, double[,] anchorCoordinatesYValue, double normativeResistance, double crackedNormativeForce, double uncrackedNormativeForce,
+        double concreteBaseWidth, double concreteBaseLength, double criticInterAxialDistance, double criticEdgeDistance, double minBaseHeight,
+        double factBaseHeight, double phiC, double gammaNs, double gammaNp, double gammaNc, double gammaNsp, bool isCracked)
     {
-        CalcMatrix(nValue, mxValue, myValue, toughValue, hValue,
-            diameterValue, rbValue, e1Value, aValue, bValue, triangulationValue,
-            zsxValue, zsyValue, multipleXValue, multipleYValue, multipleZValue);
+        Force = forceValue;
+        MomentX=momentXValue;
+        MomentY=momentYValue;
+        SealingDepth=sealingDepthValue;
+        ConcreteResistance = concreteResistanceValue;
+        Diameter=diameterValue;
+        LocalDeformation = localDeformationValue;
+        BasePlateLength = basePlateLengthValue;
+        BasePlateWidth = basePlateWidthValue;
+        Triangulation=triangulationValue;
+        AnchorCoordinatesX = anchorCoordinatesXValue;
+        AnchorCoordinatesY = anchorCoordinatesYValue;
+        NormativeResistance = normativeResistance;
+        CrackedNormativeForce = crackedNormativeForce;
+        UncrackedNormativeForce = uncrackedNormativeForce;
+        ConcreteBaseWidth = concreteBaseWidth;
+        ConcreteBaseLength = concreteBaseLength;
+        CriticInterAxialDistance = criticInterAxialDistance;
+        CriticEdgeDistance = criticEdgeDistance;
+        MinBaseHeight = minBaseHeight;
+        FactBaseHeight = factBaseHeight;
+        PhiC = phiC;
+        GammaNs = gammaNs;
+        GammaNp = gammaNp;
+        GammaNc = gammaNc;
+        GammaNsp = gammaNsp;
+        IsCracked= isCracked;
+
+        DeformationModel();
+        AnchorValidate();
     }
+    #region DeformationModelProperties
 
-    public double[,] Zbx { get; private set; } = new double[1, 1];
+    public double[,] BasePlateCoordinatesX { get; private set; } = new double[1, 1];// Координаты Х сетки напряжений, мм
 
-    public double[,] Zby { get; private set; } = new double[1, 1];
+    public double[,] BasePlateCoordinatesY { get; private set; } = new double[1, 1];// Координаты Y сетки напряжений, мм
 
-    public double[,] Zsy { get; private set; } = new double[1, 1];
+    public double[,] ConcreteTensionValues { get; private set; } = new double[1, 1];// Напряжения в бетоне, МПа
 
-    public double[,] Zsx { get; private set; } = new double[1, 1];
-    public double[,] Zbz { get; private set; } = new double[1, 1];
-    public double[,] Nan { get; private set; } = new double[1, 1];
-    public double XR { get; private set; }
-    public double YR { get; private set; }
-    public double NB { get; private set; }
+    public double[,] AnchorForce { get; private set; } = new double[1, 1]; // Усилия в анкерах, кН
 
-    public static double ConcreteDiagram(double concreteDeformation, double concreteDiagramParameter,
-        double concreteDiagramInverseParameter, double concreteResistance)
+    public double ResultantCoordinatesX { get; private set; }// Координаты приложения равнодействующей, мм
+
+    public double ResultantCoordinatesY { get; private set; }// Координаты приложения равнодействующей, мм
+
+    public double ResultantForce { get; private set; } // Равнодействующая сила в бетоне, кН
+
+    public double[,] AnchorCoordinatesX { get; private set; } //Координаты анкеров по оси X, мм
+
+    public double[,] AnchorCoordinatesY { get; private set; } //Координаты анкеров по оси Y, мм
+
+    public double Force { get;}//Внешняя продольная сила, кН (+растяжение/-сжатие)
+
+    public double MomentX { get; }//Изгибающий момент Мх, кН*м
+
+    public double MomentY { get; }//Изгибающий момент Му, кН*м
+
+    public double SealingDepth { get; set; } //Эффективная глубина анкеровки, принимаемая в зависимости от типа и марки анкера по техпаспорту, мм
+
+    public double ConcreteResistance { get;}//Расчетное сопротивление бетона, МПа
+
+    public double LocalDeformation { get;}//Относительная деформация бетона
+
+    public double BasePlateWidth { get;}//Ширина опорной пластины, мм
+
+    public double BasePlateLength { get;}//Длина опорной пластины, мм
+
+    public int Triangulation { get;}//Кратность разбивки (численного интегрирования)
+
+    public double Diameter { get;}//Диаметр анкера, мм
+
+    #endregion
+
+    #region AnchorValidateProperties
+
+    /*Нормативное значение силы сопротивления анкера
+    при разрушении по стали, принимаемое в зависимости от 
+    типа и марки анкера по техпаспорту, кН*/
+    public double NormativeResistance { get; }
+
+    /*Нормативное значение силы сопротивления анкера
+    сцепления с основанием (по контакту), принимаемое в зависимости от 
+    типа и марки анкера по техпаспорту для основания с трещинами, кН*/
+    public double CrackedNormativeForce { get; }
+
+    /*Нормативное значение силы сопротивления анкера
+    сцепления с основанием (по контакту), принимаемое в зависимости от 
+    типа и марки анкера по техпаспорту для основания без трещин, кН*/
+    public double UncrackedNormativeForce { get; }
+
+    /*Ширина бетонного основания, мм*/
+    public double ConcreteBaseWidth { get; }
+
+    /*Длина бетонного основания, мм*/
+    public double ConcreteBaseLength { get; }
+
+    /*Критическое межосевое расстояние, принимаемое в зависимости от
+    типа и марки анкера по техпаспорту*/
+    public double CriticInterAxialDistance { get; }
+
+    /*Критическое краевое расстояние, принимаемое в зависимости от
+    типа и марки анкера по техпаспорту*/
+    public double CriticEdgeDistance { get; }
+
+    /*Минимальная высота бетонного основания, принимаемое в зависимости от
+    типа и марки анкера по техпаспорту, мм*/
+    public double MinBaseHeight { get; }
+
+    /*Фактическая высота бетонного основания, мм*/
+    public double FactBaseHeight { get; }
+
+    /*Коэффициент, учитывающий фактическую прочность бетонного основания,
+    принимаемый в зависимости от типа и марки анкера по техпаспорту*/
+    public double PhiC { get; }
+
+    /*Коэффициент надежности по стали при растяжении,
+    принимаемый в зависимости от типа и марки анкера по техпаспорту*/
+    public double GammaNs { get; }
+
+    /*Коэффициент условий работы анкера при разрыве контакта с бетонным основанием,
+    принимаемый в зависимости от типа и марки анкера по техпаспорту*/
+    public double GammaNp { get; }
+
+    /*Коэффициент условий работы анкера при выкалывании бетонного основания,
+    принимаемый в зависимости от типа и марки анкера по техпаспорту*/
+    public double GammaNc { get; }
+
+    /*Коэффициент условий работы анкера при раскалывании бетонного основания,
+    принимаемый в зависимости от типа и марки анкера по техпаспорту*/
+    public double GammaNsp { get; }
+
+    /*Наличие трещин*/
+    public bool IsCracked { get; }
+
+    /*Проверка на разрушение по стали анкера*/
+    public double AnchorValidateSteel { get; set; }
+
+    /*Проверка на разрушение по контакту с основанием*/
+    public double AnchorValidateContact { get; set; }
+
+    /*Проверка на разрушение от выкалывания бетонного основания*/
+    public double AnchorValidateExcavation { get; set; }
+
+    /*Проверка на разрушение от раскалывания бетонного основания*/
+    public double AnchorValidateSplitting { get; set; }
+
+    #endregion
+
+    public double ConcreteDiagram(double concreteDeformation, double deformationModule)
     {
-        if (concreteDeformation >= -concreteDiagramParameter && concreteDeformation < 0)
-            return -concreteDiagramInverseParameter * concreteDeformation;
+        if (concreteDeformation >= -LocalDeformation && concreteDeformation < 0)
+            return -deformationModule * concreteDeformation;
+
         if (concreteDeformation >= -0.0035 && concreteDeformation < 0)
-            return concreteResistance;
+            return ConcreteResistance;
+
         return 0;
     }
 
@@ -38,71 +173,44 @@ public class Calc
     {
         if (anchorDeformation >= 0)
             return elasticModule * anchorDeformation;
+
         return 0;
     }
 
-    /// <summary>
-    ///     This method contains main business logic of the app
-    /// </summary>
-    /// <param name="forceValue">Внешняя продольная сила, кН (+растяжение/-сжатие)</param>
-    /// <param name="momentXValue">Изгибающий момент Мх, кН*м</param>
-    /// <param name="momentYValue">Изгибающий момент Му, кН*м</param>
-    /// <param name="toughValue">Жесткость анкера, кН/м</param>
-    /// <param name="sealingDepthValue">Глубина заделки анкера, мм</param>
-    /// <param name="diameterValue">Диаметр анкера, мм</param>
-    /// <param name="concreteResistanceValue">Расчетное сопротивление бетона, МПа</param>
-    /// <param name="localDeformationValue">Относительная деформация бетона</param>
-    /// <param name="baseWidthValue">Ширина опорной пластины, мм</param>
-    /// <param name="baseLengthValue">Длина опорной пластины, мм</param>
-    /// <param name="triangulationValue">Кратность разбивки (численного интегрирования)</param>
-    /// <param name="anchorCoordinatesXValue">Координаты анкеров по оси X, мм</param>
-    /// <param name="anchorCoordinatesYValue">Координаты анкеров по оси У, мм</param>
-    /// <param name="multipleXValue">Кратность оси Х</param>
-    /// <param name="multipleYValue">Кратность оси Y</param>
-    /// <param name="multipleZValue">Кратность оси Z</param>
-    public void CalcMatrix(double forceValue, double momentXValue, double momentYValue, double toughValue,
-        double sealingDepthValue,
-        double diameterValue, double concreteResistanceValue, double localDeformationValue,
-        double baseWidthValue, double baseLengthValue, int triangulationValue,
-        double[,] anchorCoordinatesXValue, double[,] anchorCoordinatesYValue, int multipleXValue, int multipleYValue,
-        int multipleZValue)
+
+    public void DeformationModel()
     {
-        double deformationModule = concreteResistanceValue / localDeformationValue; //модуль приведенной деформации бетона
-        int triangulation = triangulationValue + 1; //кратность разбивки (численного интегрирования)
-        double baseWidthSegment = baseWidthValue / triangulationValue; //ширина сетки разбивки бетона, мм
-        double baseLengthSegment = baseLengthValue / triangulationValue; //длина сетки разбивки бетона, мм
-        double areaOfSegment = baseWidthSegment * baseLengthSegment; //площадь сетки разбивки бетона, мм2
+
+        int triangulation = Triangulation + 1; //кратность разбивки (численного интегрирования)
+        double deformationModule = ConcreteResistance / LocalDeformation; //модуль приведенной деформации бетона
+        double baseWidthSegment = BasePlateWidth / Triangulation; //ширина сетки разбивки бетона, мм
+        double baseLengthSegment = BasePlateLength / Triangulation; //длина сетки разбивки бетона, мм
+        double areaOfSegment = baseWidthSegment * baseLengthSegment / 1000 / 1000; //площадь сетки разбивки бетона, мм2
+        double anchorSectionArea = Math.PI * Diameter * Diameter / 4 / 1000 / 1000; // площадь сечения анкера номинальная, мм2
+        double anchorTough = 100;
+        double elasticModule = anchorTough * SealingDepth / anchorSectionArea / 1000; // приведенный модуль упругости анкера, МПа
+        double[,] forceVector = { { MomentX / 1000 }, { MomentY / 1000 }, { Force / 1000 } }; //вектор нагрузок МН (МН*м)
+
         Matrix baseCoordinatesX = new double[triangulation, triangulation];
         Matrix baseCoordinatesY = new double[triangulation, triangulation];
+        Matrix primaryBaseMatrix = new double[triangulation, triangulation];
+
         for (var i = 0; i < triangulation; i++)
         for (var j = 0; j < triangulation; j++)
         {
-            baseCoordinatesX[i, j] = baseWidthSegment * j - baseWidthValue * 0.5;
-            baseCoordinatesY[i, j] = baseLengthSegment * j - baseLengthValue * 0.5;
+            baseCoordinatesX[i, j] = (baseWidthSegment * j - BasePlateWidth * 0.5)/1000;
+            baseCoordinatesY[j, i] = (baseLengthSegment * j - BasePlateLength * 0.5)/1000;
+            primaryBaseMatrix[i, j] = 1; // коэффициенты учета = 1,0 для первого шага
         }
 
-        baseCoordinatesY=baseCoordinatesY.Transpose(); //массивы координат ячеек сетки бетона
-        double anchorSectionArea = Math.PI * diameterValue * diameterValue / 4; // площадь сечения анкера номинальная, мм2
-        double elasticModule =
-            toughValue * sealingDepthValue / anchorSectionArea * 1000; // приведенный модуль упругости анкера, МПа
-        double[,] forceVector =
-            { { momentXValue / 1000 }, { momentYValue / 1000 }, { forceValue / 1000 } }; //вектор нагрузок МН (МН*м)
-        Matrix anchorCoordinatesX = anchorCoordinatesXValue;
-        Matrix anchorCoordinatesY = anchorCoordinatesYValue;
-        anchorCoordinatesX/=1000;
-        anchorCoordinatesY /= 1000;
-        baseCoordinatesX /= 1000;
-        baseCoordinatesY /= 1000; // перевод мм в м
-        anchorSectionArea = anchorSectionArea / 1000 / 1000;
-        areaOfSegment = areaOfSegment / 1000 / 1000; // перевод мм2 в м2
-        Matrix primaryBaseMatrix = new double[triangulation, triangulation];
+        Matrix anchorCoordinatesX = AnchorCoordinatesX;
+        Matrix anchorCoordinatesY = AnchorCoordinatesY;
         Matrix primaryAnchorMatrix = new double[1, anchorCoordinatesX.GetLength(1)];
-        for (var i = 0; i < triangulation; i++)
-        for (var j = 0; j < triangulation; j++)
-            primaryBaseMatrix[i, j] = 1; // коэффициенты учета = 1,0 для первого шага
+
         for (var i = 0; i < 1; i++)
         for (var j = 0; j < anchorCoordinatesX.GetLength(1); j++)
             primaryAnchorMatrix[i, j] = 1;
+
         if (anchorCoordinatesX.GetLength(1) > 1)
         {
             // формирование матрицы жесткости для первого шага
@@ -122,7 +230,7 @@ public class Calc
             matrixEquation[1, 0] = matrixEquation[0, 1];
             matrixEquation[2, 0] = matrixEquation[0, 2];
             matrixEquation[2, 1] = matrixEquation[1, 2];
-            var error = 0.001; // допустимая погрешность итерационного решения
+            double error = 0.001; // допустимая погрешность итерационного решения
             double actualError = 1;
             Matrix anchorTensionMatrix = new double[1, 1];
             Matrix concreteTensionMatrix = new double[1, 1];
@@ -132,23 +240,18 @@ public class Calc
                 Matrix concreteDeformations = baseCoordinatesX* solutionOfEquation[0, 0]+baseCoordinatesY* solutionOfEquation[1, 0]+ solutionOfEquation[2, 0]; // распределение деформаций в бетоне
                 Matrix anchorDeformations = anchorCoordinatesX * solutionOfEquation[0, 0] + anchorCoordinatesY * solutionOfEquation[1, 0] + solutionOfEquation[2, 0]; // рапсределение деформаций в анкерах
 
-                concreteTensionMatrix =
-                    new double[concreteDeformations.GetLength(0), concreteDeformations.GetLength(1)];
+                concreteTensionMatrix = new double[concreteDeformations.GetLength(0), concreteDeformations.GetLength(1)];
 
-                for (var i = 0;
-                     i < concreteDeformations.GetLength(0);
-                     i++) // определение напряжений и коэффициентов учета в бетоне
+                for (var i = 0; i < concreteDeformations.GetLength(0); i++) // определение напряжений и коэффициентов учета в бетоне
                 for (var j = 0; j < concreteDeformations.GetLength(1); j++)
                 {
-                    concreteTensionMatrix[i, j] = ConcreteDiagram(concreteDeformations[i, j], localDeformationValue,
-                        deformationModule, concreteResistanceValue); // обращение к диаграмме бетона
+                    concreteTensionMatrix[i, j] = ConcreteDiagram(concreteDeformations[i, j], deformationModule); // обращение к диаграмме бетона
                     primaryBaseMatrix[i, j] = -concreteTensionMatrix[i, j] / (concreteDeformations[i, j] * deformationModule);
                 }
 
                 anchorTensionMatrix = new double[anchorDeformations.GetLength(0), anchorDeformations.GetLength(1)];
 
-                for (var i = 0; i < anchorDeformations.GetLength(0);
-                     i++) // определение напряжений и коэффициентов учета для анкеров
+                for (var i = 0; i < anchorDeformations.GetLength(0); i++) // определение напряжений и коэффициентов учета для анкеров
                 for (var j = 0; j < anchorDeformations.GetLength(1); j++)
                 {
                     anchorTensionMatrix[i, j] = AnchorDiagram(anchorDeformations[i, j], elasticModule); // обращение к диаграмме анкера
@@ -171,279 +274,227 @@ public class Calc
                matrixEquation[1, 0] = matrixEquation[0, 1];
                matrixEquation[2, 0] = matrixEquation[0, 2];
                matrixEquation[2, 1] = matrixEquation[1, 2];
+
                Matrix updatedSolutionOfEquation = matrixEquation.Solution(solutionOfEquation); // определение усилий при уточненной жесткости на данном шаге(расчет в матричном виде)
-               Matrix differenceBetweenSteps = updatedSolutionOfEquation- forceVector;
-                actualError = differenceBetweenSteps.Abs().Transpose().Max(); //оценка относительной погрешности расчета
+               actualError = (updatedSolutionOfEquation - forceVector).Abs().Transpose().Max(); //оценка относительной погрешности расчета
             }
 
-            Zby = baseCoordinatesY * multipleYValue;
-            Zbx = baseCoordinatesX * multipleXValue;
-            Zbz = concreteTensionMatrix *-multipleZValue;
-            Nan = anchorTensionMatrix* anchorSectionArea * 1000; // усилия в анкерах, кН
-            Zsx = anchorCoordinatesX;
-            Zsy = anchorCoordinatesY;
-            NB = (concreteTensionMatrix * areaOfSegment).Sum().Sum() * 1000; // равнодействующая сила в бетоне, кН
-            XR = (concreteTensionMatrix * baseCoordinatesX * areaOfSegment).Sum().Sum()*1000 / NB * 1000; // координаты приложения равнодействующей
-            YR = (concreteTensionMatrix * baseCoordinatesY * areaOfSegment).Sum().Sum()*1000 / NB * 1000;
+            BasePlateCoordinatesY = baseCoordinatesY * 1000;
+            BasePlateCoordinatesX = baseCoordinatesX * 1000;
+            ConcreteTensionValues = concreteTensionMatrix *-10;
+            AnchorForce = anchorTensionMatrix* anchorSectionArea * 1000;
+            AnchorCoordinatesX = anchorCoordinatesX;
+            AnchorCoordinatesY = anchorCoordinatesY;
+            ResultantForce = (concreteTensionMatrix * areaOfSegment).Sum().Sum() * 1000;
+            ResultantCoordinatesX = (concreteTensionMatrix * baseCoordinatesX * areaOfSegment).Sum().Sum()*1000 * 1000 / ResultantForce ; 
+            ResultantCoordinatesY = (concreteTensionMatrix * baseCoordinatesY * areaOfSegment).Sum().Sum()*1000 * 1000 / ResultantForce ;
         }
         else
         {
-            Nan = new[,] { { forceValue } };
-            Zby = baseCoordinatesY * multipleYValue;
-            Zbx = baseCoordinatesX * multipleXValue;
-            Zbz = new Matrix(new double[triangulationValue, triangulationValue])* -multipleZValue;
+            AnchorForce = new[,] { { Force } };
+            BasePlateCoordinatesY = baseCoordinatesY * 1000;
+            BasePlateCoordinatesX = baseCoordinatesX * 1000;
+            ConcreteTensionValues = new Matrix(new double[Triangulation, Triangulation])* -10;
         }
     }
 
-    public void Validate(double NormativeResistance, double gammaNs, bool isPtr, double Nnptr, double Nnpwihtouttr, double gammaNp,
-
-        double phiC, double gammaNc, double Rbn, double hef, double A, double B, double scrSP, double ccrSP, double gammaNsp, double hmin, double hfact)
+    public void AnchorValidate()
     {
-        double nanMax = 0;
-        for (var i = 0; i < Nan.Length; i++)
-            if (nanMax < Nan[0, i])
-                nanMax = Nan[0, i];
+        double maxForce = ((Matrix)AnchorForce).Max();
+        double sumForce = ((Matrix)AnchorForce).Sum().Sum();
+        AnchorValidateSteel = maxForce / (NormativeResistance / GammaNs)*100;
 
-        //double NormativeResistance = 0; //нормативное значение силы сопротивления анкера
-        //при разрушении по стали, принимаемое в зависимости от 
-        //типа и марки анкера по техпаспорту
-        //double gammaNs = 0; //коэффициент надежности по стали при растяжении
-        //, принимаемое в зависимости от типа и марки анкера по техпаспорту
 
-        //****ПЕРВАЯ ПРОВЕР ОЧКА****
-        var Nult1 = NormativeResistance / gammaNs;
-        if (nanMax < Nult1)
-            Console.WriteLine("zaebis");
-        //****ПЕРВАЯ ПРОВЕР ОЧКА****
+        double gammaBt = 1.5; //Коэффициент надежности по бетону при растяжении по СП 63.13330.2018
+        double forceUltContact = IsCracked ? CrackedNormativeForce * PhiC / GammaNp * gammaBt: UncrackedNormativeForce * PhiC / GammaNp * gammaBt;
+        AnchorValidateContact = maxForce / forceUltContact*100;
 
-        //var isPtr = true; //наличие трещин
-        //double Nnptr = 0; //нормативное значение силы сопротивления анкера
-        //сцепления с основанием (по контакту), принимаемое в зависимости от 
-        //типа и марки анкера по техпаспорту для основания с трещинами
-        //double Nnpwihtouttr = 0; //нормативное значение силы сопротивления анкера
-        //сцепления с основанием (по контакту), принимаемое в зависимости от 
-        //типа и марки анкера по техпаспорту для основания без трещин
-        var gammaBt = 1.5; //Коэффициент надежности по бетону при растяжении
-        //double gammaNp = 0; //коэффициент условий работы анкера, принимаемый в зависимости от типа и марки анкера по техпаспорту
-        //double phiC = 0; //коэффициент, учитывающий фактическую прочность бетонного основания, принимаемый
-        //в зависимости от класса бетона на сжатие и типа и марки анкера по техпаспорту
 
-        //****ВТОРАЯ ПРОВЕР ОЧКА****
-        double Nult2 = 0;
-        if (isPtr)
-            Nult2 = Nnptr * phiC / gammaNp * gammaBt;
-        else
-            Nult2 = Nnpwihtouttr * phiC / gammaNp * gammaBt;
-        if (nanMax < Nult2)
-            Console.WriteLine("zaebis");
-        //****ВТОРАЯ ПРОВЕР ОЧКА****
-        //double gammaNc = 0; //коэффициент условий работы анкера при выкалывании бетонного основания, принимаемый в зависимости от типа и марки анкера по техпаспорту
-        double k1 = 0; // коэффициент зависящий от наличия трещин
-        if (isPtr)
-            k1 = 7.9;
-        else
-            k1 = 11.3;
-        //double Rbn = 0; //нормативное сопротивление бетона сжатию, принимаемое по СП 63.13330 в зависимости от класса бетона на сжатие, МПа*****УЖЕ ЕСТЬ В МАТРИКС КАЛЬКЕ********
-        //double hef = 0; //эффективная глубина анкеровки, принимаемая в зависимости от типа и марки анкера по техпаспорту*****УЖЕ ЕСТЬ В МАТРИКС КАЛЬКЕ********
-        var Nonc = k1 * Math.Pow(Rbn, 0.5) *
-                   Math.Pow(hef,
-                       1.5); //значение силы сопротивления, Н, для одиночного анкера, расположенного на значительном удалении от края основания соседнего анкера, при разрушении от выкалывания бетонного основания
-        var scrN = 3 * hef; //критическое расстояние между анкерами (межосевое)
-        var ccrN = 1.5 * hef; //критическое краевое расстояние
-        double
-            AcN = 0; //фактическая площадь основания условной призмы выкалывания, с учетом влияния соседних анкеров, а также влияния краевого расположения
-        double
-            AocN = scrN * scrN; //площадь основания условной призмы выкалывания для одиночного анкера, расположенного на значительном удалении от края основания и соседнего анкера
+        double k1 = IsCracked ? 7.9 : 11.3;// Коэффициент зависящий от наличия трещин
+        double excavationNormativeResistance = k1 * Math.Pow(ConcreteResistance, 0.5) * Math.Pow(SealingDepth, 1.5)/1000; 
+        //Значение силы сопротивления, кН, для одиночного анкера, расположенного на значительном удалении от края основания соседнего анкера,
+        //при разрушении от выкалывания бетонного основания
+        double normativeCriticInterAxialDistance = 3 * SealingDepth; //Расчетное критическое межосевое расстояние между анкерами, мм
+        double phiRen = 0.5 + SealingDepth / 200; //Коэффициент влияния установки в защитном слое гутсоармированных конструкций
+        if (phiRen > 1) phiRen = 1;
+        double phiEcn = 1; //Коэффициент влияния неравномерного загружения анкерной группы
 
-        //double A = 0; //ширина бетонного основания
-        //double B = 0; //длина бетонного основания
-        double[] rverh = [];
-        double[] rniz = [];
-        double[] rlevo = [];
-        double[] rpravo = [];
-        var coordV = B / 2;
-        var coordN = -B / 2;
-        var coordL = -A / 2;
-        var coordP = A / 2;
-        bool[] isCrayCriticV = [];
-        bool[] isCrayCriticN = [];
-        bool[] isCrayCriticL = [];
-        bool[] isCrayCriticP = [];
-        bool[] isAxisCriticV = [];
-        bool[] isAxisCriticN = [];
-        bool[] isAxisCriticL = [];
-        bool[] isAxisCriticP = [];
-        double cmax = 0; //фактическое краевое расстояние, надо считать в зависимости от координат анкеров и размеров пластины
-        var cmin = ccrN;
-        double smax = 0; //фактическое межосевое расстояние между анкерами, считается в зависимотси от координат
-        double[] criticcount = [];
-        for (var i = 0; i < Nan.GetLength(1); i++)
+        if (AnchorForce.GetLength(1) > 1)
+            phiEcn = 1; // ((1 + 2 * Math.Abs(ResultantCoordinatesX) / normativeCriticInterAxialDistance) * 
+                          //(1 + 2 * Math.Abs(ResultantCoordinatesY) / normativeCriticInterAxialDistance)); 
+        if (phiEcn > 1) phiEcn = 1;
+        double forceUltExcavation = excavationNormativeResistance / (gammaBt * GammaNc) * phiRen * phiEcn;
+        AnchorValidateExcavation = AnchorForce.GetLength(1) switch
         {
-            if (Math.Abs(coordV - Zsy[0, i]) < ccrN)
-            {
-                rverh[i] = Math.Abs(coordV - Zsy[0, i]);
-                isCrayCriticV[i] = true;
-                criticcount[i] += 1;
-                if (cmin > rverh[i]) cmin = rverh[i];
-            }
+            > 1 => maxForce / forceUltExcavation * 100,
+            _ => maxForce / forceUltExcavation*100
+        };
 
-            if (Math.Abs(coordN - Zsy[0, i]) < ccrN)
-            {
-                rniz[i] = Math.Abs(coordN - Zsy[0, i]);
-                isCrayCriticN[i] = true;
-                criticcount[i] += 1;
-                if (cmin > rniz[i]) cmin = rniz[i];
-            }
 
-            if (Math.Abs(coordL - Zsx[0, i]) < ccrN)
-            {
-                rlevo[i] = Math.Abs(coordL - Zsx[0, i]);
-                isCrayCriticL[i] = true;
-                criticcount[i] += 1;
-                if (cmin > rlevo[i]) cmin = rlevo[i];
-            }
-
-            if (Math.Abs(coordP - Zsx[0, i]) < ccrN)
-            {
-                rpravo[i] = Math.Abs(coordP - Zsx[0, i]);
-                isCrayCriticP[i] = true;
-                criticcount[i] += 1;
-                if (cmin > rpravo[i]) cmin = rpravo[i];
-            }
-
-            if (Nan.GetLength(1) > 1)
-                for (var j = 0; j < Nan.GetLength(1); j++)
-                    if (Math.Pow(Math.Pow(Zsx[0, i] - Zsx[0, j], 2) + Math.Pow(Zsy[0, i] - Zsy[0, j], 2), 0.5) <
-                        scrN)
-                    {
-                        if (Zsx[0, i] < Zsx[0, j])
-                        {
-                            rpravo[i] = Math.Abs(Zsx[0, i] - Zsx[0, j]) / 2;
-                            isAxisCriticP[i] = true;
-                            criticcount[i] += 1;
-                        }
-
-                        if (Zsx[0, i] > Zsx[0, j])
-                        {
-                            rlevo[i] = Math.Abs(Zsx[0, i] - Zsx[0, j]) / 2;
-                            isAxisCriticL[i] = true;
-                            criticcount[i] += 1;
-                        }
-
-                        if (Zsy[0, i] < Zsy[0, j])
-                        {
-                            rverh[i] = Math.Abs(Zsy[0, i] - Zsy[0, j]) / 2;
-                            isAxisCriticV[i] = true;
-                            criticcount[i] += 1;
-                        }
-
-                        if (Zsy[0, i] > Zsy[0, j])
-                        {
-                            rniz[i] = Math.Abs(Zsy[0, i] - Zsy[0, j]) / 2;
-                            isAxisCriticN[i] = true;
-                            criticcount[i] += 1;
-                        }
-                    }
-
-            if (criticcount[i] > 2)
-            {
-                if (isCrayCriticV[i] & (rverh[i] > cmax)) cmax = rverh[i];
-
-                if (isCrayCriticN[i] & (rniz[i] > cmax)) cmax = rniz[i];
-
-                if (isCrayCriticL[i] & (rlevo[i] > cmax)) cmax = rlevo[i];
-
-                if (isCrayCriticP[i] & (rpravo[i] > cmax)) cmax = rpravo[i];
-
-                if (isAxisCriticV[i] & (rverh[i] > smax)) smax = rverh[i];
-
-                if (isAxisCriticN[i] & (rniz[i] > smax)) smax = rniz[i];
-
-                if (isAxisCriticL[i] & (rlevo[i] > smax)) smax = rlevo[i];
-
-                if (isAxisCriticP[i] & (rpravo[i] > smax)) smax = rpravo[i];
-                if (cmax / 1.5 > smax / 3)
-                    hef = cmax / 1.5;
-                else
-                    hef = smax / 3;
-                scrN = 3 * hef;
-                ccrN = 1.5 * hef;
-            }
-
-            AcN += (rlevo[i] + rpravo[i]) * (rniz[i] + rverh[i]);
-        }
-
-        for (var i = 0; i < Nan.GetLength(1); i++)
+        if (AnchorForce.Length > 1)
+            phiEcn = 1 ;// ((1 + 2 * Math.Abs(ResultantCoordinatesX) / CriticInterAxialDistance) *
+                          //(1 + 2 * Math.Abs(ResultantCoordinatesY) / CriticInterAxialDistance)); 
+        //коэффициент влияния неравномерного загружения анкерной группы
+        if (phiEcn > 1) phiEcn = 1;
+        double splittingNormativeResistance = excavationNormativeResistance / (gammaBt * GammaNc) * phiRen * phiEcn;
+        double phiHsp = Math.Pow(FactBaseHeight / MinBaseHeight, 0D);
+        if (phiHsp > Math.Pow(2 * SealingDepth / MinBaseHeight, 0D)) phiHsp = Math.Pow(2 * SealingDepth / MinBaseHeight, 0D);
+        double forceUltSplitting = splittingNormativeResistance * phiHsp / GammaNsp;
+        AnchorValidateSplitting = AnchorForce.GetLength(1) switch
         {
-            if (Math.Abs(coordV - Zsy[0, i]) < ccrN) rverh[i] = Math.Abs(coordV - Zsy[0, i]);
-            if (Math.Abs(coordN - Zsy[0, i]) < ccrN) rniz[i] = Math.Abs(coordN - Zsy[0, i]);
-            if (Math.Abs(coordL - Zsx[0, i]) < ccrN) rlevo[i] = Math.Abs(coordL - Zsx[0, i]);
-            if (Math.Abs(coordP - Zsx[0, i]) < ccrN) rpravo[i] = Math.Abs(coordP - Zsx[0, i]);
-            if (Nan.Length > 1)
-                for (var j = 0; j < Nan.Length; j++)
-                    if (Math.Pow(Math.Pow(Zsx[0, i] - Zsx[0, j], 2) + Math.Pow(Zsy[0, i] - Zsy[0, j], 2), 0.5) <
-                        scrN)
-                    {
-                        if (Zsx[0, i] < Zsx[0, j]) rpravo[i] = Math.Abs(Zsx[0, i] - Zsx[0, j]) / 2;
-
-                        if (Zsx[0, i] > Zsx[0, j]) rlevo[i] = Math.Abs(Zsx[0, i] - Zsx[0, j]) / 2;
-
-                        if (Zsy[0, i] < Zsy[0, j]) rverh[i] = Math.Abs(Zsy[0, i] - Zsy[0, j]) / 2;
-
-                        if (Zsy[0, i] > Zsy[0, j]) rniz[i] = Math.Abs(Zsy[0, i] - Zsy[0, j]) / 2;
-                    }
-
-            AcN += (rlevo[i] + rpravo[i]) * (rniz[i] + rverh[i]);
-        }
-
-        var PhiSN = 0.7 + 0.3 * cmin / ccrN; //коэффициент влияния установки у края основания
-        if (PhiSN > 1) PhiSN = 1;
-        var PhireN = 0.5 + hef / 200; //коэффициент влияния установки в защитном слое гутсоармированных конструкций
-        if (PhireN > 1) PhireN = 1;
-        double PhiecN = 1;
-        if (Nan.GetLength(1) > 1)
-            PhiecN = 1 / (1 + 2 * XR / scrN) *
-                     (1 / (1 + 2 * YR / scrN)); //коэффициент влияния неравномерного загружения анкерной группы
-        if (PhiecN > 1) PhiecN = 1;
-        var Nult3 = Nonc / (gammaBt * gammaNc) * (AcN / AocN) * PhiSN * PhireN * PhiecN;
-        //****ТРЕТЬЯ ПРОВЕР ОЧКА****
-
-        if (Nan.GetLength(1) > 1 && NB < Nult3)
-        {
-            Console.WriteLine("zaebis");
-        }
-        else if (Nan.GetLength(1) == 1 && nanMax < Nult3)
-        {
-            Console.WriteLine("zaebis");
-        }
-            //****ТРЕТЬЯ ПРОВЕР ОЧКА****
-
-            //double scrSP = 0; //критическое межосевое расстояние по тех паспорту
-        //double ccrSP = 0; //критическое краевоерасстояние по тех паспорту
-        AocN = scrSP * scrSP;
-        PhiSN = 0.7 + 0.3 * cmin / ccrSP;
-        if (Nan.Length > 1)
-            PhiecN = 1 / (1 + 2 * XR / scrSP) *
-                     (1 / (1 + 2 * YR / scrSP)); //коэффициент влияния неравномерного загружения анкерной группы
-        if (PhiecN > 1) PhiecN = 1;
-        var Nspnc = Nonc / (gammaBt * gammaNc) * (AcN / AocN) * PhiSN * PhireN * PhiecN;
-        //double gammaNsp = 0; //коэффициент условий работы анкера при расзрушении отрасклаывания основания при растяжениии, принимаемый в зависимости от типа и марки анкера по тех паспорту
-        //double hmin = 0; // минимальная толщина основания по тех паспорту
-        //double hfact = 0; //фактическая толщина основания
-        var PhihSP = Math.Pow(hfact / hmin, 2 / 3);
-        if (PhihSP > Math.Pow(2 * hef / hmin, 2 / 3)) PhihSP = Math.Pow(2 * hef / hmin, 2 / 3);
-
-        var Nult4 = Nspnc * PhihSP / gammaNsp;
-
-        //****ЧЕТВЕРТАЯ ПРОВЕР ОЧКА****
-        if (Nan.GetLength(1) > 1 && NB < Nult4)
-        {
-            Console.WriteLine("zaebis");
-        }
-        else if (Nan.GetLength(1) == 1 && nanMax < Nult4)
-        {
-            Console.WriteLine("zaebis");
-        }
-        //****ЧЕТВЕРТАЯ ПРОВЕР ОЧКА****
+            > 1 => maxForce / forceUltSplitting*100,
+            _ => maxForce / forceUltSplitting*100
+        };
     }
+
+
+    #region future features
+    /*double factArea = 0; //фактическая площадь основания условной призмы выкалывания, с учетом влияния соседних анкеров, а также влияния краевого расположения
+        double defaultArea = normativeCriticInterAxialDistance * normativeCriticInterAxialDistance; //площадь основания условной призмы выкалывания для одиночного анкера, расположенного на значительном удалении от края основания и соседнего анкера
+        double[] up = [];
+        double[] down = [];
+        double[] left = [];
+        double[] right = [];
+        var baseUp = ConcreteBaseLength / 2;
+        var baseDown = -ConcreteBaseLength / 2;
+        var baseLeft = -ConcreteBaseWidth / 2;
+        var baseRight = ConcreteBaseWidth / 2;
+        bool[] isEdgeCriticUp = [];
+        bool[] isEdgeCriticDown = [];
+        bool[] isEdgeCriticLeft = [];
+        bool[] isEdgeCriticRight = [];
+        bool[] isAxisCriticUp = [];
+        bool[] isAxisCriticDown = [];
+        bool[] isAxisCriticLeft = [];
+        bool[] isAxisCriticRight = [];
+        double edgeDistanceMax = 0; //фактическое краевое расстояние, надо считать в зависимости от координат анкеров и размеров пластины
+        var edgeDistanceMin = normativeCriticEdgeDistance;
+        double axisDistanceMax = 0; //фактическое межосевое расстояние между анкерами, считается в зависимотси от координат
+        double[] criticCount = [];
+        for (var i = 0; i < AnchorForce.GetLength(1); i++)
+        {
+            if (Math.Abs(baseUp - AnchorCoordinatesY
+                    [0, i]) < normativeCriticEdgeDistance)
+            {
+                up[i] = Math.Abs(baseUp - AnchorCoordinatesY[0, i]);
+                isEdgeCriticUp[i] = true;
+                criticCount[i] += 1;
+                if (edgeDistanceMin > up[i]) edgeDistanceMin = up[i];
+            }
+
+            if (Math.Abs(baseDown - AnchorCoordinatesY[0, i]) < normativeCriticEdgeDistance)
+            {
+                down[i] = Math.Abs(baseDown - AnchorCoordinatesY[0, i]);
+                isEdgeCriticDown[i] = true;
+                criticCount[i] += 1;
+                if (edgeDistanceMin > down[i]) edgeDistanceMin = down[i];
+            }
+
+            if (Math.Abs(baseLeft - AnchorCoordinatesX[0, i]) < normativeCriticEdgeDistance)
+            {
+                left[i] = Math.Abs(baseLeft - AnchorCoordinatesX[0, i]);
+                isEdgeCriticLeft[i] = true;
+                criticCount[i] += 1;
+                if (edgeDistanceMin > left[i]) edgeDistanceMin = left[i];
+            }
+
+            if (Math.Abs(baseRight - AnchorCoordinatesX[0, i]) < normativeCriticEdgeDistance)
+            {
+                right[i] = Math.Abs(baseRight - AnchorCoordinatesX[0, i]);
+                isEdgeCriticRight[i] = true;
+                criticCount[i] += 1;
+                if (edgeDistanceMin > right[i]) edgeDistanceMin = right[i];
+            }
+
+            if (AnchorForce.GetLength(1) > 1)
+                for (var j = 0; j < AnchorForce.GetLength(1); j++)
+                    if (Math.Pow(Math.Pow(AnchorCoordinatesX[0, i] - AnchorCoordinatesX[0, j], 2) + Math.Pow(AnchorCoordinatesY[0, i] - AnchorCoordinatesY[0, j], 2), 0.5) <
+                        normativeCriticInterAxialDistance)
+                    {
+                        if (AnchorCoordinatesX[0, i] < AnchorCoordinatesX[0, j])
+                        {
+                            right[i] = Math.Abs(AnchorCoordinatesX[0, i] - AnchorCoordinatesX[0, j]) / 2;
+                            isAxisCriticRight[i] = true;
+                            criticCount[i] += 1;
+                        }
+
+                        if (AnchorCoordinatesX[0, i] > AnchorCoordinatesX[0, j])
+                        {
+                            left[i] = Math.Abs(AnchorCoordinatesX[0, i] - AnchorCoordinatesX[0, j]) / 2;
+                            isAxisCriticLeft[i] = true;
+                            criticCount[i] += 1;
+                        }
+
+                        if (AnchorCoordinatesY[0, i] < AnchorCoordinatesY[0, j])
+                        {
+                            up[i] = Math.Abs(AnchorCoordinatesY[0, i] - AnchorCoordinatesY[0, j]) / 2;
+                            isAxisCriticUp[i] = true;
+                            criticCount[i] += 1;
+                        }
+
+                        if (AnchorCoordinatesY[0, i] > AnchorCoordinatesY[0, j])
+                        {
+                            down[i] = Math.Abs(AnchorCoordinatesY[0, i] - AnchorCoordinatesY[0, j]) / 2;
+                            isAxisCriticDown[i] = true;
+                            criticCount[i] += 1;
+                        }
+                    }
+
+            if (criticCount[i] > 2)
+            {
+                if (isEdgeCriticUp[i] & (up[i] > edgeDistanceMax)) edgeDistanceMax = up[i];
+
+                if (isEdgeCriticDown[i] & (down[i] > edgeDistanceMax)) edgeDistanceMax = down[i];
+
+                if (isEdgeCriticLeft[i] & (left[i] > edgeDistanceMax)) edgeDistanceMax = left[i];
+
+                if (isEdgeCriticRight[i] & (right[i] > edgeDistanceMax)) edgeDistanceMax = right[i];
+
+                if (isAxisCriticUp[i] & (up[i] > axisDistanceMax)) axisDistanceMax = up[i];
+
+                if (isAxisCriticDown[i] & (down[i] > axisDistanceMax)) axisDistanceMax = down[i];
+
+                if (isAxisCriticLeft[i] & (left[i] > axisDistanceMax)) axisDistanceMax = left[i];
+
+                if (isAxisCriticRight[i] & (right[i] > axisDistanceMax)) axisDistanceMax = right[i];
+                if (edgeDistanceMax / 1.5 > axisDistanceMax / 3)
+                    SealingDepth = edgeDistanceMax / 1.5;
+                else
+                    SealingDepth = axisDistanceMax / 3;
+                normativeCriticInterAxialDistance = 3 * SealingDepth;
+                normativeCriticEdgeDistance = 1.5 * SealingDepth;
+            }
+
+            factArea += (left[i] + right[i]) * (down[i] + up[i]);
+        }
+
+        for (var i = 0; i < AnchorForce.GetLength(1); i++)
+        {
+            if (Math.Abs(baseUp - AnchorCoordinatesY[0, i]) < normativeCriticEdgeDistance) up[i] = Math.Abs(baseUp - AnchorCoordinatesY[0, i]);
+            if (Math.Abs(baseDown - AnchorCoordinatesY[0, i]) < normativeCriticEdgeDistance) down[i] = Math.Abs(baseDown - AnchorCoordinatesY[0, i]);
+            if (Math.Abs(baseLeft - AnchorCoordinatesX[0, i]) < normativeCriticEdgeDistance) left[i] = Math.Abs(baseLeft - AnchorCoordinatesX[0, i]);
+            if (Math.Abs(baseRight - AnchorCoordinatesX[0, i]) < normativeCriticEdgeDistance) right[i] = Math.Abs(baseRight - AnchorCoordinatesX[0, i]);
+            if (AnchorForce.Length > 1)
+                for (var j = 0; j < AnchorForce.Length; j++)
+                    if (Math.Pow(Math.Pow(AnchorCoordinatesX[0, i] - AnchorCoordinatesX[0, j], 2) + Math.Pow(AnchorCoordinatesY[0, i] - AnchorCoordinatesY[0, j], 2), 0.5) <
+                        normativeCriticInterAxialDistance)
+                    {
+                        if (AnchorCoordinatesX[0, i] < AnchorCoordinatesX[0, j]) right[i] = Math.Abs(AnchorCoordinatesX[0, i] - AnchorCoordinatesX[0, j]) / 2;
+
+                        if (AnchorCoordinatesX[0, i] > AnchorCoordinatesX[0, j]) left[i] = Math.Abs(AnchorCoordinatesX[0, i] - AnchorCoordinatesX[0, j]) / 2;
+
+                        if (AnchorCoordinatesY[0, i] < AnchorCoordinatesY[0, j]) up[i] = Math.Abs(AnchorCoordinatesY[0, i] - AnchorCoordinatesY[0, j]) / 2;
+
+                        if (AnchorCoordinatesY[0, i] > AnchorCoordinatesY[0, j]) down[i] = Math.Abs(AnchorCoordinatesY[0, i] - AnchorCoordinatesY[0, j]) / 2;
+                    }
+
+            factArea += (left[i] + right[i]) * (down[i] + up[i]);
+        }
+        var phiSn = 0.7 + 0.3 * edgeDistanceMin / normativeCriticEdgeDistance; //коэффициент влияния установки у края основания
+        if (phiSn > 1) phiSn = 1; 
+        Я пытался сделать автоматическое определение наличия критических краевых и осевых расстояний в соответствии с СП и подсчет их влияния на несущую способность, 
+        но на данный момент этот функционал не нужен.
+        Формула для 3й проверки, если раскомментировать этот блок будет такой:
+        var nUlt3 = excavationNormativeResistance / (gammaBt * GammaNc) * (factArea / defaultArea) * phiSn * phiRen * phiEcn;*/
+    #endregion
 }

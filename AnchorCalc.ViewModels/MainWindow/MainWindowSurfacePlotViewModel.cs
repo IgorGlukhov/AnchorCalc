@@ -16,46 +16,60 @@ public class MainWindowSurfacePlotViewModel : ViewModel, IMainWindowSurfacePlotV
     private readonly Command _enterPropertiesCommand;
     private readonly List<TextBox> _listTextBoxX = [];
     private readonly List<TextBox> _listTextBoxY = [];
-    private double _a = 300;
+    private double[,] _anchorCoordinatesX = { { -0.110, -0.110, 0.110, 0.110 } };
+    private double[,] _anchorCoordinatesY = { { -0.110, 0.110, -0.110, 0.110 } };
 
     private int _anchorCount = 4;
+    private StackPanel _anchorForceStack = new();
+    private string _anchorValidateContact = string.Empty;
+    private string _anchorValidateExcavation = string.Empty;
+    private string _anchorValidateSplitting = string.Empty;
+    private string _anchorValidateSteel = string.Empty;
 
-    private double _b = 300;
+    private double _basePlateLength = 300;
+    private double _basePlateWidth = 300;
+    private double _concreteBaseLength = 400;
+    private double _concreteBaseWidth = 400;
 
-    private double _d = 12;
+    private double _concreteResistance = 18.5;
+    private double _crackedNormativeForce = 16;
+    private double _criticEdgeDistance = 150;
+    private double _criticInterAxialDistance = 300;
 
     private Point3D[,] _dataPoints = new Point3D[1, 1];
-    private double _e1 = 0.0015;
 
-    private double _h = 100;
+    private double _diameter = 12;
+    private double _factBaseHeight = 250;
 
-    private int _multipleX = 1000;
+    private double _force = 10;
+    private double[,] _forceDataArray = new double[1, 1];
+    private double _gammaNc = 1;
+    private double _gammaNp = 1;
+    private double _gammaNs = 1.25;
+    private double _gammaNsp = 1;
+    private bool _isCracked = true;
+    private double _localDeformation = 0.0015;
+    private double _minBaseHeight = 100;
 
-    private int _multipleY = 1000;
 
-    private int _multipleZ = 10;
+    private double _momentX = 3;
 
-    private double _mx = 3;
-
-    private double _my = 10;
-
-    private double _n = 10;
-    private StackPanel _numberCoordinatesStack = new();
+    private double _momentY = 10;
+    private double _normativeResistance = 40;
     private StackPanel _numberAnchorStack = new();
-    private StackPanel _anchorForceStack = new();
+    private StackPanel _numberCoordinatesStack = new();
+    private double _phiC = 1;
 
-    private double _rb = 17;
+    private double _sealingDepth = 70;
 
     private string _title = "Напряжения в бетоне основания";
-
-    private double _tough = 100;
-
+    
     private int _triangulation = 100;
+    private double _uncrackedNormativeForce = 25;
 
     private string _xAxisLabel = "X";
     private StackPanel _xCoordinatesStack = new();
     private double[,] _xData2DArray = new double[1, 1];
-    private double[,] _forceDataArray = new double[1, 1];
 
     private string _yAxisLabel = "Y";
     private StackPanel _yCoordinatesStack = new();
@@ -63,8 +77,6 @@ public class MainWindowSurfacePlotViewModel : ViewModel, IMainWindowSurfacePlotV
 
     private string _zAxisLabel = "Z";
     private double[,] _zData2DArray = new double[1, 1];
-    private double[,] _zsx = { { -110, -110, 110, 110 } };
-    private double[,] _zsy = { { -110, 110, -110, 110 } };
 
     public MainWindowSurfacePlotViewModel()
     {
@@ -82,6 +94,7 @@ public class MainWindowSurfacePlotViewModel : ViewModel, IMainWindowSurfacePlotV
             OnPropertyChanged();
         }
     }
+
     public StackPanel NumberAnchorStack
     {
         get => _numberAnchorStack;
@@ -91,6 +104,7 @@ public class MainWindowSurfacePlotViewModel : ViewModel, IMainWindowSurfacePlotV
             OnPropertyChanged();
         }
     }
+
     public StackPanel AnchorForceStack
     {
         get => _anchorForceStack;
@@ -100,6 +114,7 @@ public class MainWindowSurfacePlotViewModel : ViewModel, IMainWindowSurfacePlotV
             OnPropertyChanged();
         }
     }
+
     public StackPanel XCoordinatesStack
     {
         get => _xCoordinatesStack;
@@ -123,15 +138,7 @@ public class MainWindowSurfacePlotViewModel : ViewModel, IMainWindowSurfacePlotV
     public ICommand EnterPropertiesCommand => _enterPropertiesCommand;
     public ICommand AddCoordinateContainersCommand => _addCoordinateContainersCommand;
 
-    public double[,] XData2DArray
-    {
-        get => _xData2DArray;
-        private set
-        {
-            _xData2DArray = value;
-            OnPropertyChanged();
-        }
-    }
+
     public double[,] ForceDataArray
     {
         get => _forceDataArray;
@@ -142,26 +149,35 @@ public class MainWindowSurfacePlotViewModel : ViewModel, IMainWindowSurfacePlotV
         }
     }
 
-    public double[,] Zsx
+    public double[,] AnchorCoordinatesX
     {
-        get => _zsx;
+        get => _anchorCoordinatesX;
         set
         {
-            _zsx = value;
+            _anchorCoordinatesX = value;
             OnPropertyChanged();
         }
     }
 
-    public double[,] Zsy
+    public double[,] AnchorCoordinatesY
     {
-        get => _zsy;
+        get => _anchorCoordinatesY;
         set
         {
-            _zsy = value;
+            _anchorCoordinatesY = value;
             OnPropertyChanged();
         }
     }
 
+    public double[,] XData2DArray
+    {
+        get => _xData2DArray;
+        private set
+        {
+            _xData2DArray = value;
+            OnPropertyChanged();
+        }
+    }
 
     public double[,] YData2DArray
     {
@@ -183,12 +199,202 @@ public class MainWindowSurfacePlotViewModel : ViewModel, IMainWindowSurfacePlotV
         }
     }
 
-    public double E1
+    public double LocalDeformation
     {
-        get => _e1;
+        get => _localDeformation;
         set
         {
-            _e1 = value;
+            _localDeformation = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public double NormativeResistance
+    {
+        get => _normativeResistance;
+        set
+        {
+            _normativeResistance = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public double CrackedNormativeForce
+    {
+        get => _crackedNormativeForce;
+        set
+        {
+            _crackedNormativeForce = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public double UncrackedNormativeForce
+    {
+        get => _uncrackedNormativeForce;
+        set
+        {
+            _uncrackedNormativeForce = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public double ConcreteBaseWidth
+    {
+        get => _concreteBaseWidth;
+        set
+        {
+            _concreteBaseWidth = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public double ConcreteBaseLength
+    {
+        get => _concreteBaseLength;
+        set
+        {
+            _concreteBaseLength = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public double CriticInterAxialDistance
+    {
+        get => _criticInterAxialDistance;
+        set
+        {
+            _criticInterAxialDistance = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public double CriticEdgeDistance
+    {
+        get => _criticEdgeDistance;
+        set
+        {
+            _criticEdgeDistance = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public double MinBaseHeight
+    {
+        get => _minBaseHeight;
+        set
+        {
+            _minBaseHeight = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public double FactBaseHeight
+    {
+        get => _factBaseHeight;
+        set
+        {
+            _factBaseHeight = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public double PhiC
+    {
+        get => _phiC;
+        set
+        {
+            _phiC = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public double GammaNs
+    {
+        get => _gammaNs;
+        set
+        {
+            _gammaNs = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public double GammaNp
+    {
+        get => _gammaNp;
+        set
+        {
+            _gammaNp = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public double GammaNc
+    {
+        get => _gammaNc;
+        set
+        {
+            _gammaNc = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public double GammaNsp
+    {
+        get => _gammaNsp;
+        set
+        {
+            _gammaNsp = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public bool IsCracked
+    {
+        get => _isCracked;
+        set
+        {
+            _isCracked = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public string AnchorValidateSplitting
+    {
+        get => _anchorValidateSplitting;
+        set
+        {
+            _anchorValidateSplitting = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public string AnchorValidateExcavation
+    {
+        get => _anchorValidateExcavation;
+        set
+        {
+            _anchorValidateExcavation = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public string AnchorValidateContact
+    {
+        get => _anchorValidateContact;
+        set
+        {
+            _anchorValidateContact = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public string AnchorValidateSteel
+    {
+        get => _anchorValidateSteel;
+        set
+        {
+            _anchorValidateSteel = value;
             OnPropertyChanged();
         }
     }
@@ -245,92 +451,83 @@ public class MainWindowSurfacePlotViewModel : ViewModel, IMainWindowSurfacePlotV
 
     public bool ShowMiniCoordinates { get; } = true;
 
-    public double N
+    public double Force
     {
-        get => _n;
+        get => _force;
         set
         {
-            _n = value;
+            _force = value;
             OnPropertyChanged();
         }
     }
 
-    public double Mx
+    public double MomentX
     {
-        get => _mx;
+        get => _momentX;
         set
         {
-            _mx = value;
+            _momentX = value;
             OnPropertyChanged();
         }
     }
 
-    public double My
+    public double MomentY
     {
-        get => _my;
+        get => _momentY;
         set
         {
-            _my = value;
+            _momentY = value;
             OnPropertyChanged();
         }
     }
 
-    public double Tough
+
+    public double SealingDepth
     {
-        get => _tough;
+        get => _sealingDepth;
         set
         {
-            _tough = value;
+            _sealingDepth = value;
             OnPropertyChanged();
         }
     }
 
-    public double H
+    public double Diameter
     {
-        get => _h;
+        get => _diameter;
         set
         {
-            _h = value;
+            _diameter = value;
             OnPropertyChanged();
         }
     }
 
-    public double D
+    public double ConcreteResistance
     {
-        get => _d;
+        get => _concreteResistance;
         set
         {
-            _d = value;
+            _concreteResistance = value;
             OnPropertyChanged();
         }
     }
 
-    public double Rb
+    public double BasePlateWidth
     {
-        get => _rb;
+        get => _basePlateWidth;
         set
         {
-            _rb = value;
+            _basePlateWidth = value;
             OnPropertyChanged();
         }
     }
 
-    public double A
+    public double BasePlateLength
     {
-        get => _a;
+        get => _basePlateLength;
         set
         {
-            _a = value;
-            OnPropertyChanged();
-        }
-    }
-
-    public double B
-    {
-        get => _b;
-        set
-        {
-            _b = value;
+            _basePlateLength = value;
             OnPropertyChanged();
         }
     }
@@ -345,35 +542,6 @@ public class MainWindowSurfacePlotViewModel : ViewModel, IMainWindowSurfacePlotV
         }
     }
 
-    public int MultipleX
-    {
-        get => _multipleX;
-        set
-        {
-            _multipleX = value;
-            OnPropertyChanged();
-        }
-    }
-
-    public int MultipleY
-    {
-        get => _multipleY;
-        set
-        {
-            _multipleY = value;
-            OnPropertyChanged();
-        }
-    }
-
-    public int MultipleZ
-    {
-        get => _multipleZ;
-        set
-        {
-            _multipleZ = value;
-            OnPropertyChanged();
-        }
-    }
 
     public int AnchorCount
     {
@@ -410,7 +578,8 @@ public class MainWindowSurfacePlotViewModel : ViewModel, IMainWindowSurfacePlotV
                 Background = new SolidColorBrush(Colors.White)
             };
             border.Child = textBoxX;
-            if (Zsx.GetLength(1) > i) textBoxX.Text = Zsx[0, i].ToString(CultureInfo.CurrentCulture);
+            if (AnchorCoordinatesX.GetLength(1) > i)
+                textBoxX.Text = (AnchorCoordinatesX[0, i] * 1000).ToString(CultureInfo.CurrentCulture);
             _listTextBoxX.Add(textBoxX);
             XCoordinatesStack.Children.Add(border);
         }
@@ -430,7 +599,8 @@ public class MainWindowSurfacePlotViewModel : ViewModel, IMainWindowSurfacePlotV
                 Background = new SolidColorBrush(Colors.White)
             };
             border.Child = textBoxY;
-            if (Zsy.GetLength(1) > i) textBoxY.Text = Zsy[0, i].ToString(CultureInfo.CurrentCulture);
+            if (AnchorCoordinatesY.GetLength(1) > i)
+                textBoxY.Text = (AnchorCoordinatesY[0, i] * 1000).ToString(CultureInfo.CurrentCulture);
             _listTextBoxY.Add(textBoxY);
             YCoordinatesStack.Children.Add(border);
         }
@@ -453,6 +623,7 @@ public class MainWindowSurfacePlotViewModel : ViewModel, IMainWindowSurfacePlotV
             border.Child = textBoxNumber;
             NumberCoordinatesStack.Children.Add(border);
         }
+
         for (var i = 0; i < AnchorCount; i++)
         {
             var border = new Border
@@ -490,16 +661,17 @@ public class MainWindowSurfacePlotViewModel : ViewModel, IMainWindowSurfacePlotV
             NumberAnchorStack.Children.Add(border);
         }
     }
+
     private void EnterProperties()
     {
         if (_listTextBoxX.Count > 0 && _listTextBoxY.Count > 0)
         {
-            Zsx = new double[1, AnchorCount];
-            Zsy = new double[1, AnchorCount];
+            AnchorCoordinatesX = new double[1, AnchorCount];
+            AnchorCoordinatesY = new double[1, AnchorCount];
             for (var i = 0; i < AnchorCount; i++)
             {
-                Zsx[0, i] = double.Parse(_listTextBoxX[i].Text);
-                Zsy[0, i] = double.Parse(_listTextBoxY[i].Text);
+                AnchorCoordinatesX[0, i] = double.Parse(_listTextBoxX[i].Text) / 1000;
+                AnchorCoordinatesY[0, i] = double.Parse(_listTextBoxY[i].Text) / 1000;
             }
         }
         else
@@ -512,12 +684,19 @@ public class MainWindowSurfacePlotViewModel : ViewModel, IMainWindowSurfacePlotV
 
     private void ModelChange()
     {
-        var calc = new Calc(N, Mx, My, Tough, H, D, Rb, E1, A, B, Triangulation,
-            Zsx, Zsy, MultipleX, MultipleY, MultipleZ);
-        ZData2DArray = calc.Zbz;
-        XData2DArray = calc.Zbx;
-        YData2DArray = calc.Zby;
-        ForceDataArray = calc.Nan;
+        var calc = new Calc(Force, MomentX, MomentY,  SealingDepth, Diameter, ConcreteResistance,
+            LocalDeformation, BasePlateWidth, BasePlateLength, Triangulation,
+            AnchorCoordinatesX, AnchorCoordinatesY, NormativeResistance, CrackedNormativeForce, UncrackedNormativeForce,
+            ConcreteBaseWidth, ConcreteBaseLength, CriticInterAxialDistance, CriticEdgeDistance, MinBaseHeight,
+            FactBaseHeight, PhiC, GammaNs, GammaNp, GammaNc, GammaNsp, IsCracked);
+        ZData2DArray = calc.ConcreteTensionValues;
+        XData2DArray = calc.BasePlateCoordinatesX;
+        YData2DArray = calc.BasePlateCoordinatesY;
+        AnchorValidateSteel = $"{calc.AnchorValidateSteel:0.00}%";
+        AnchorValidateContact = $"{calc.AnchorValidateContact:0.00}%";
+        AnchorValidateExcavation = $"{calc.AnchorValidateExcavation:0.00}%";
+        AnchorValidateSplitting = $"{calc.AnchorValidateSplitting:0.00}%";
+        ForceDataArray = calc.AnchorForce;
         DataPoints = PlotFromArray.Plot(XData2DArray, YData2DArray, ZData2DArray);
         AddAnchorCoordinateContainers();
     }

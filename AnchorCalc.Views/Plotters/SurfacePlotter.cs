@@ -24,7 +24,7 @@ public class SurfacePlotter : ModelVisual3D
             {
                 Positions =
                 [
-                    new Point3D(200, 0, 0), new Point3D(0, 200, 0), new Point3D(-200, 0, 0), new Point3D(0, -200, 0)
+                    new Point3D(250, 0, 0), new Point3D(0, 250, 0), new Point3D(-250, 0, 0), new Point3D(0, -250, 0)
                 ]
             }
         };

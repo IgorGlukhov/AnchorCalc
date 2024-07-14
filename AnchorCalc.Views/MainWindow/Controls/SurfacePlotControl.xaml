@@ -21,7 +21,7 @@
             Margin="10"
             HorizontalAlignment="Center" />
         <h:HelixViewport3D
-            x:Name="Viewport"
+            Name="Viewport"
             Grid.Row="0"
             Grid.RowSpan="2"
             ZoomExtentsWhenLoaded="True"
