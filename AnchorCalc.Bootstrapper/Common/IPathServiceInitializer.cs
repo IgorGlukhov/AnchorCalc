@@ -1,4 +1,4 @@
-﻿namespace AnchorCalc.Infrastructure.Common;
+﻿namespace AnchorCalc.Bootstrapper.Common;
 
 public interface IPathServiceInitializer
 {

@@ -2,15 +2,8 @@
 
 namespace AnchorCalc.ViewModels.Commands;
 
-public class Command : ICommand
+public class Command(Action execute) : ICommand
 {
-    private readonly Action _execute;
-
-    public Command(Action execute)
-    {
-        _execute = execute;
-    }
-
     public bool CanExecute(object? parameter)
     {
         return true;
@@ -18,7 +11,7 @@ public class Command : ICommand
 
     public void Execute(object? parameter)
     {
-        _execute.Invoke();
+        execute.Invoke();
     }
 
     public event EventHandler? CanExecuteChanged;

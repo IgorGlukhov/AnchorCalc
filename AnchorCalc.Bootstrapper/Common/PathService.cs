@@ -1,4 +1,6 @@
-﻿namespace AnchorCalc.Infrastructure.Common;
+﻿using AnchorCalc.Infrastructure.Common;
+
+namespace AnchorCalc.Bootstrapper.Common;
 
 internal class PathService : IPathService, IPathServiceInitializer
 {

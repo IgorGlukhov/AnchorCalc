@@ -1,10 +1,10 @@
 ﻿<UserControl x:Class="AnchorCalc.Views.MainWindow.Controls.CalculationOutputControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mainWindow="clr-namespace:AnchorCalc.ViewModels.MainWindow;assembly=AnchorCalc.ViewModels"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800"
              d:DataContext="{d:DesignInstance mainWindow:MainWindowSurfacePlotViewModel}">
     <Grid>
@@ -24,12 +24,13 @@
         </Grid.RowDefinitions>
         <TextBlock Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" Text="Отчет" FontSize="20" FontWeight="Bold"
                    HorizontalAlignment="Center" Margin="5" />
-        <TextBlock Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" Text="Усилия в анкерах" FontSize="16" FontWeight="Bold"
+        <TextBlock Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" Text="Усилия в анкерах" FontSize="16"
+                   FontWeight="Bold"
                    HorizontalAlignment="Center" Margin="5" />
-        <Border Grid.Row="2" Grid.Column="0" BorderThickness="1" BorderBrush="Black" >
+        <Border Grid.Row="2" Grid.Column="0" BorderThickness="1" BorderBrush="Black">
             <TextBlock Text="№ анкера" FontSize="10" FontWeight="Normal" HorizontalAlignment="Center" />
         </Border>
-        <Border Grid.Row="2" Grid.Column="1" BorderThickness="1" BorderBrush="Black" >
+        <Border Grid.Row="2" Grid.Column="1" BorderThickness="1" BorderBrush="Black">
             <TextBlock Text="Усилие, кН" FontSize="10" FontWeight="Normal"
                        HorizontalAlignment="Center" />
         </Border>
@@ -39,157 +40,174 @@
         <ScrollViewer Grid.Row="3" Grid.Column="1" VerticalScrollBarVisibility="Auto" HorizontalAlignment="Stretch">
             <ContentControl Content="{Binding AnchorForceStack}" />
         </ScrollViewer>
-        <TextBlock Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="4" Text="Данные для проверки на прочность &#x0a;           по СП 513.1325800.2022" 
+        <TextBlock Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="4"
+                   Text="Данные для проверки на прочность &#x0a;           по СП 513.1325800.2022"
                    FontSize="16" FontWeight="Bold"
                    HorizontalAlignment="Center" Margin="5" />
 
 
-
         <StackPanel Grid.Column="0" Grid.Row="5" Margin="0" Orientation="Vertical"
-            HorizontalAlignment="Stretch">
+                    HorizontalAlignment="Stretch">
             <Border BorderThickness="1" BorderBrush="Black" Background="White">
-                <TextBlock Text="Nns, кН" 
+                <TextBlock Text="Nns, кН"
                            FontSize="12" FontWeight="Normal" HorizontalAlignment="Left" Height="16" />
             </Border>
             <Border BorderThickness="1" BorderBrush="Black" Background="White">
-                <TextBlock Text="Nnp (с трещинами), кН" 
+                <TextBlock Text="Nnp (с трещинами), кН"
                            FontSize="12" FontWeight="Normal" HorizontalAlignment="Left" Height="16" />
             </Border>
             <Border BorderThickness="1" BorderBrush="Black" Background="White">
-                <TextBlock Text="Nnp (без трещин), кН" 
+                <TextBlock Text="Nnp (без трещин), кН"
                            FontSize="12" FontWeight="Normal" HorizontalAlignment="Left" Height="16" />
             </Border>
             <Border BorderThickness="1" BorderBrush="Black" Background="White">
-                <TextBlock Text="Ширина бетонного основания, мм" FontSize="12" FontWeight="Normal" HorizontalAlignment="Left" Height="16" />
+                <TextBlock Text="Ширина бетонного основания, мм" FontSize="12" FontWeight="Normal"
+                           HorizontalAlignment="Left" Height="16" />
             </Border>
             <Border BorderThickness="1" BorderBrush="Black" Background="White">
-                <TextBlock Text="Длина бетонного основания, мм" FontSize="12" FontWeight="Normal" HorizontalAlignment="Left"
-   Height="16" />
+                <TextBlock Text="Длина бетонного основания, мм" FontSize="12" FontWeight="Normal"
+                           HorizontalAlignment="Left"
+                           Height="16" />
             </Border>
             <Border BorderThickness="1" BorderBrush="Black" Background="White">
                 <TextBlock Text="Критическое межосевое расстояние, мм" FontSize="12" FontWeight="Normal"
-   HorizontalAlignment="Left" Height="16" />
+                           HorizontalAlignment="Left" Height="16" />
             </Border>
             <Border BorderThickness="1" BorderBrush="Black" Background="White">
-                <TextBlock Text="Критическое краевое расстояние, мм" FontSize="12" FontWeight="Normal" HorizontalAlignment="Left"
-   Height="16" />
+                <TextBlock Text="Критическое краевое расстояние, мм" FontSize="12" FontWeight="Normal"
+                           HorizontalAlignment="Left"
+                           Height="16" />
             </Border>
             <Border BorderThickness="1" BorderBrush="Black" Background="White">
                 <TextBlock Text="Минимальная толщина основания, мм" FontSize="12" FontWeight="Normal"
-   HorizontalAlignment="Left" Height="16" />
+                           HorizontalAlignment="Left" Height="16" />
             </Border>
             <Border BorderThickness="1" BorderBrush="Black" Background="White">
                 <TextBlock Text="Фактическая толщина основания, мм" FontSize="12" FontWeight="Normal"
-   HorizontalAlignment="Left" Height="16" />
+                           HorizontalAlignment="Left" Height="16" />
             </Border>
             <Border BorderThickness="1" BorderBrush="Black" Background="White">
                 <TextBlock Text="PhiC" FontSize="12" FontWeight="Normal"
-   HorizontalAlignment="Left" Height="16" />
+                           HorizontalAlignment="Left" Height="16" />
             </Border>
             <Border BorderThickness="1" BorderBrush="Black" Background="White">
                 <TextBlock Text="GammaNs" FontSize="12" FontWeight="Normal"
-   HorizontalAlignment="Left" Height="16" />
+                           HorizontalAlignment="Left" Height="16" />
             </Border>
             <Border BorderThickness="1" BorderBrush="Black" Background="White">
                 <TextBlock Text="GammaNp" FontSize="12" FontWeight="Normal" HorizontalAlignment="Left"
-   Height="16" />
+                           Height="16" />
             </Border>
             <Border BorderThickness="1" BorderBrush="Black" Background="White">
                 <TextBlock Text="GammaNc" FontSize="12" FontWeight="Normal" HorizontalAlignment="Left"
-   Height="16" />
+                           Height="16" />
             </Border>
             <Border BorderThickness="1" BorderBrush="Black" Background="White">
                 <TextBlock Text="GammaNsp" FontSize="12" FontWeight="Normal" HorizontalAlignment="Left"
-   Height="16" />
+                           Height="16" />
             </Border>
             <Border BorderThickness="1" BorderBrush="Black" Opacity="50" Background="White">
                 <TextBlock Text="Наличие трещин" FontSize="12" FontWeight="Normal" HorizontalAlignment="Left"
-   Height="16" />
+                           Height="16" />
             </Border>
         </StackPanel>
         <StackPanel Grid.Column="1" Grid.Row="5" Margin="0" Orientation="Vertical" HorizontalAlignment="Stretch">
             <Border BorderThickness="1" BorderBrush="Black">
-                <TextBox Text="{Binding Path=NormativeResistance, Mode=TwoWay, UpdateSourceTrigger=LostFocus  }" FontSize="12"
-             FontWeight="Normal" Height="16" BorderThickness="0"/>
+                <TextBox Text="{Binding Path=NormativeResistance, Mode=TwoWay, UpdateSourceTrigger=LostFocus  }"
+                         FontSize="12"
+                         FontWeight="Normal" Height="16" BorderThickness="0" />
             </Border>
             <Border BorderThickness="1" BorderBrush="Black">
-                <TextBox Text="{Binding Path=CrackedNormativeForce, Mode=TwoWay, UpdateSourceTrigger=LostFocus  }" FontSize="12"
-             FontWeight="Normal" Height="16" BorderThickness="0"/>
+                <TextBox Text="{Binding Path=CrackedNormativeForce, Mode=TwoWay, UpdateSourceTrigger=LostFocus  }"
+                         FontSize="12"
+                         FontWeight="Normal" Height="16" BorderThickness="0" />
             </Border>
             <Border BorderThickness="1" BorderBrush="Black">
-                <TextBox Text="{Binding Path=UncrackedNormativeForce, Mode=TwoWay, UpdateSourceTrigger=LostFocus  }" FontSize="12"
-             FontWeight="Normal" Height="16" BorderThickness="0"/>
+                <TextBox Text="{Binding Path=UncrackedNormativeForce, Mode=TwoWay, UpdateSourceTrigger=LostFocus  }"
+                         FontSize="12"
+                         FontWeight="Normal" Height="16" BorderThickness="0" />
             </Border>
             <Border BorderThickness="1" BorderBrush="Black">
-                <TextBox Text="{Binding Path=ConcreteBaseWidth, Mode=TwoWay, UpdateSourceTrigger=LostFocus  }" FontSize="12"
-             FontWeight="Normal" Height="16" BorderThickness="0"/>
+                <TextBox Text="{Binding Path=ConcreteBaseWidth, Mode=TwoWay, UpdateSourceTrigger=LostFocus  }"
+                         FontSize="12"
+                         FontWeight="Normal" Height="16" BorderThickness="0" />
             </Border>
             <Border BorderThickness="1" BorderBrush="Black">
-                <TextBox Text="{Binding Path=ConcreteBaseLength, Mode=TwoWay, UpdateSourceTrigger=LostFocus  }" FontSize="12"
-             FontWeight="Normal" Height="16" BorderThickness="0"/>
+                <TextBox Text="{Binding Path=ConcreteBaseLength, Mode=TwoWay, UpdateSourceTrigger=LostFocus  }"
+                         FontSize="12"
+                         FontWeight="Normal" Height="16" BorderThickness="0" />
             </Border>
             <Border BorderThickness="1" BorderBrush="Black">
-                <TextBox Text="{Binding Path=CriticInterAxialDistance, Mode=TwoWay, UpdateSourceTrigger=LostFocus  }" FontSize="12"
-             FontWeight="Normal" Height="16" BorderThickness="0"/>
+                <TextBox Text="{Binding Path=CriticInterAxialDistance, Mode=TwoWay, UpdateSourceTrigger=LostFocus  }"
+                         FontSize="12"
+                         FontWeight="Normal" Height="16" BorderThickness="0" />
             </Border>
             <Border BorderThickness="1" BorderBrush="Black">
-                <TextBox Text="{Binding Path=CriticEdgeDistance, Mode=TwoWay, UpdateSourceTrigger=LostFocus  }" FontSize="12"
-             FontWeight="Normal" Height="16" BorderThickness="0"/>
+                <TextBox Text="{Binding Path=CriticEdgeDistance, Mode=TwoWay, UpdateSourceTrigger=LostFocus  }"
+                         FontSize="12"
+                         FontWeight="Normal" Height="16" BorderThickness="0" />
             </Border>
             <Border BorderThickness="1" BorderBrush="Black">
-                <TextBox Text="{Binding Path=MinBaseHeight, Mode=TwoWay, UpdateSourceTrigger=LostFocus  }" FontSize="12"
-             FontWeight="Normal" Height="16" BorderThickness="0"/>
+                <TextBox Text="{Binding Path=MinBaseHeight, Mode=TwoWay, UpdateSourceTrigger=LostFocus  }"
+                         FontSize="12"
+                         FontWeight="Normal" Height="16" BorderThickness="0" />
             </Border>
             <Border BorderThickness="1" BorderBrush="Black">
-                <TextBox Text="{Binding Path=FactBaseHeight, Mode=TwoWay, UpdateSourceTrigger=LostFocus  }" FontSize="12"
-             FontWeight="Normal" Height="16" BorderThickness="0"/>
+                <TextBox Text="{Binding Path=FactBaseHeight, Mode=TwoWay, UpdateSourceTrigger=LostFocus  }"
+                         FontSize="12"
+                         FontWeight="Normal" Height="16" BorderThickness="0" />
             </Border>
             <Border BorderThickness="1" BorderBrush="Black">
                 <TextBox Text="{Binding Path=PhiC, Mode=TwoWay, UpdateSourceTrigger=LostFocus  }"
-             FontSize="12" FontWeight="Normal" Height="16" BorderThickness="0"/>
+                         FontSize="12" FontWeight="Normal" Height="16" BorderThickness="0" />
             </Border>
             <Border BorderThickness="1" BorderBrush="Black">
                 <TextBox Text="{Binding Path=GammaNs, Mode=TwoWay, UpdateSourceTrigger=LostFocus  }" FontSize="12"
-             FontWeight="Normal" Height="16" BorderThickness="0"/>
+                         FontWeight="Normal" Height="16" BorderThickness="0" />
             </Border>
             <Border BorderThickness="1" BorderBrush="Black">
                 <TextBox Text="{Binding Path=GammaNp, Mode=TwoWay, UpdateSourceTrigger=LostFocus  }" FontSize="12"
-             FontWeight="Normal" Height="16" BorderThickness="0"/>
+                         FontWeight="Normal" Height="16" BorderThickness="0" />
             </Border>
             <Border BorderThickness="1" BorderBrush="Black">
                 <TextBox Text="{Binding Path=GammaNc, Mode=TwoWay, UpdateSourceTrigger=LostFocus  }" FontSize="12"
-             FontWeight="Normal" Height="16" BorderThickness="0"/>
+                         FontWeight="Normal" Height="16" BorderThickness="0" />
             </Border>
             <Border BorderThickness="1" BorderBrush="Black">
                 <TextBox Text="{Binding Path=GammaNsp, Mode=TwoWay, UpdateSourceTrigger=LostFocus  }" FontSize="12"
-                         FontWeight="Normal" Height="16" BorderThickness="0"/>
+                         FontWeight="Normal" Height="16" BorderThickness="0" />
             </Border>
             <Border BorderThickness="1" BorderBrush="Black">
                 <TextBox Text="{Binding Path=IsCracked, Mode=TwoWay, UpdateSourceTrigger=LostFocus  }" FontSize="12"
-             FontWeight="Normal" Height="16" BorderThickness="0"/>
+                         FontWeight="Normal" Height="16" BorderThickness="0" />
             </Border>
         </StackPanel>
-        <TextBlock Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="6" Text="Проверки по I группе предельных состояний" FontSize="16" FontWeight="Bold"
+        <TextBlock Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="6" Text="Проверки по I группе предельных состояний"
+                   FontSize="16" FontWeight="Bold"
                    HorizontalAlignment="Center" Margin="5" />
         <StackPanel Grid.Column="0" Grid.Row="7" Margin="0" Orientation="Vertical"
-         HorizontalAlignment="Stretch">
+                    HorizontalAlignment="Stretch">
             <Border BorderThickness="1" BorderBrush="Black" Background="White">
-                <TextBlock Text="Проверка прочности по стали анкера" FontSize="12" FontWeight="Normal" HorizontalAlignment="Left" Height="16" />
+                <TextBlock Text="Проверка прочности по стали анкера" FontSize="12" FontWeight="Normal"
+                           HorizontalAlignment="Left" Height="16" />
             </Border>
             <Border BorderThickness="1" BorderBrush="Black" Background="White">
-                <TextBlock Text="Проверка прочности по сцеплению анкера" FontSize="12" FontWeight="Normal" HorizontalAlignment="Left" Height="16" />
+                <TextBlock Text="Проверка прочности по сцеплению анкера" FontSize="12" FontWeight="Normal"
+                           HorizontalAlignment="Left" Height="16" />
             </Border>
             <Border BorderThickness="1" BorderBrush="Black" Background="White">
-                <TextBlock Text="Проверка прочности по выкалыванию основания" FontSize="12" FontWeight="Normal" HorizontalAlignment="Left" Height="16" />
+                <TextBlock Text="Проверка прочности по выкалыванию основания" FontSize="12" FontWeight="Normal"
+                           HorizontalAlignment="Left" Height="16" />
             </Border>
             <Border BorderThickness="1" BorderBrush="Black" Background="White">
-                <TextBlock Text="Проверка прочности по раскалыванию основания" FontSize="12" FontWeight="Normal" HorizontalAlignment="Left" Height="16" />
+                <TextBlock Text="Проверка прочности по раскалыванию основания" FontSize="12" FontWeight="Normal"
+                           HorizontalAlignment="Left" Height="16" />
             </Border>
         </StackPanel>
         <StackPanel Grid.Column="1" Grid.Row="7" Margin="0" Orientation="Vertical" HorizontalAlignment="Stretch">
             <Border BorderThickness="1" BorderBrush="Black">
                 <TextBlock Text="{Binding Path=AnchorValidateSteel}" FontSize="12"
-                           FontWeight="Normal" Height="16"/>
+                           FontWeight="Normal" Height="16" />
             </Border>
             <Border BorderThickness="1" BorderBrush="Black">
                 <TextBlock Text="{Binding Path=AnchorValidateContact}" FontSize="12"

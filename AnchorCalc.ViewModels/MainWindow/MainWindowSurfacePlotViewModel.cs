@@ -63,7 +63,7 @@ public class MainWindowSurfacePlotViewModel : ViewModel, IMainWindowSurfacePlotV
     private double _sealingDepth = 70;
 
     private string _title = "Напряжения в бетоне основания";
-    
+
     private int _triangulation = 100;
     private double _uncrackedNormativeForce = 25;
 
@@ -684,7 +684,7 @@ public class MainWindowSurfacePlotViewModel : ViewModel, IMainWindowSurfacePlotV
 
     private void ModelChange()
     {
-        var calc = new Calc(Force, MomentX, MomentY,  SealingDepth, Diameter, ConcreteResistance,
+        var calc = new Calc(Force, MomentX, MomentY, SealingDepth, Diameter, ConcreteResistance,
             LocalDeformation, BasePlateWidth, BasePlateLength, Triangulation,
             AnchorCoordinatesX, AnchorCoordinatesY, NormativeResistance, CrackedNormativeForce, UncrackedNormativeForce,
             ConcreteBaseWidth, ConcreteBaseLength, CriticInterAxialDistance, CriticEdgeDistance, MinBaseHeight,

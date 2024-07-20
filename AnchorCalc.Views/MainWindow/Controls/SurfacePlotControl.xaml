@@ -8,8 +8,7 @@
              xmlns:mainWindow="clr-namespace:AnchorCalc.ViewModels.MainWindow;assembly=AnchorCalc.ViewModels"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800"
-             d:DataContext="{d:DesignInstance mainWindow:MainWindowSurfacePlotViewModel}"
-             >
+             d:DataContext="{d:DesignInstance mainWindow:MainWindowSurfacePlotViewModel}">
     <Grid Background="Gainsboro">
         <Grid.RowDefinitions>
             <RowDefinition Height="40" />
@@ -30,13 +29,13 @@
             ShowCoordinateSystem="{Binding ShowMiniCoordinates}"
             CoordinateSystemLabelX="{Binding XAxisLabel}"
             CoordinateSystemLabelY="{Binding YAxisLabel}"
-            CoordinateSystemLabelZ="{Binding ZAxisLabel}" >
+            CoordinateSystemLabelZ="{Binding ZAxisLabel}">
             <plotters:SurfacePlotter
-                DataPoints="{Binding DataPoints, UpdateSourceTrigger=PropertyChanged}"/>
+                DataPoints="{Binding DataPoints, UpdateSourceTrigger=PropertyChanged}" />
             <h:HelixViewport3D.Camera>
                 <PerspectiveCamera LookDirection="1,1,-1" UpDirection="0,0,1" />
             </h:HelixViewport3D.Camera>
-            
+
         </h:HelixViewport3D>
     </Grid>
 </UserControl>

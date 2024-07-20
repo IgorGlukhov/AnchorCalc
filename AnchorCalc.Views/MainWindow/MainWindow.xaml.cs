@@ -1,9 +1,4 @@
-﻿using System.Windows.Media.Media3D;
-using AnchorCalc.ViewModels.MainWindow;
-using System.Windows.Controls;
-using HelixToolkit.Wpf;
-using System.Windows;
-using AnchorCalc.ViewModels;
+﻿using AnchorCalc.ViewModels.MainWindow;
 
 namespace AnchorCalc.Views.MainWindow;
 

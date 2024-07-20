@@ -1,6 +1,11 @@
-﻿using AnchorCalc.Domain.Settings;
+﻿using AnchorCalc.Domain.Collections;
+using AnchorCalc.Domain.DevTools;
+using AnchorCalc.Domain.Rest;
+using AnchorCalc.Domain.Settings;
 using AnchorCalc.Domain.Version;
-using AnchorCalc.Infrastructure.Common;
+using AnchorCalc.Infrastructure.Collections;
+using AnchorCalc.Infrastructure.DevTools;
+using AnchorCalc.Infrastructure.Rest;
 using AnchorCalc.Infrastructure.Settings;
 using AnchorCalc.Infrastructure.Version;
 using Autofac;
@@ -16,14 +21,13 @@ public class RegistrationModule : Module
             .As<IMainWindowMementoWrapper>()
             .As<IWindowMementoWrapperInitializer>()
             .SingleInstance();
-        builder.RegisterType<PathService>()
-            .As<IPathService>()
-            .As<IPathServiceInitializer>()
-            .SingleInstance();
         builder.RegisterType<AboutWindowMementoWrapper>()
             .As<IAboutWindowMementoWrapper>()
             .As<IWindowMementoWrapperInitializer>()
             .SingleInstance();
         builder.RegisterType<ApplicationVersionProvider>().As<IApplicationVersionProvider>().SingleInstance();
+        builder.RegisterType<DevToolsStatusProvider>().As<IDevToolsStatusProvider>().SingleInstance();
+        builder.RegisterType<ApiRequestExecutor>().As<IApiRequestExecutor>().SingleInstance();
+        builder.RegisterType<RotatableCollectionFactory>().As<IRotatableCollectionFactory>().SingleInstance();
     }
 }

@@ -8,7 +8,7 @@ public class BoolToWindowStateConverter : IValueConverter
 {
     public static readonly IValueConverter Instance = new BoolToWindowStateConverter();
 
-    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         if (value is bool isMaximized)
             return isMaximized
@@ -17,7 +17,7 @@ public class BoolToWindowStateConverter : IValueConverter
         return WindowState.Normal;
     }
 
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         if (value is WindowState windowState)
             return windowState == WindowState.Maximized;

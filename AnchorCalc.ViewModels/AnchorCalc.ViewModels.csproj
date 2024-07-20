@@ -12,6 +12,7 @@
     <PackageReference Include="HelixToolkit" Version="2.25.0" />
     <PackageReference Include="HelixToolkit.Core.Wpf" Version="2.25.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="NLog" Version="5.3.2" />
   </ItemGroup>
 
   <ItemGroup>
@@ -21,7 +22,6 @@
 
   <ItemGroup>
     <Folder Include="AboutWindow\" />
-    <Folder Include="Commands\" />
     <Folder Include="Windows\" />
   </ItemGroup>
 

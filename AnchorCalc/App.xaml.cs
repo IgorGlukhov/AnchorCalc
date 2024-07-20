@@ -1,26 +1,36 @@
 ﻿using System.Windows;
+using System.Windows.Threading;
+using AnchorCalc.Bootstrapper;
 
 namespace AnchorCalc;
 
 public partial class App
 {
-    private Bootstrapper.Bootstrapper? _bootstrapper;
+    private ApplicationBootstrapper? _bootstrapper;
 
     protected override void OnStartup(StartupEventArgs e)
     {
         base.OnStartup(e);
-        _bootstrapper = new Bootstrapper.Bootstrapper();
-        MainWindow = _bootstrapper.Run();
+        _bootstrapper = new ApplicationBootstrapper();
+        DispatcherUnhandledException += OnUnhandledExceptionRaised;
+        var application = _bootstrapper.CreateApplication();
+        MainWindow = application.Run();
+        ;
     }
 
     protected override void OnExit(ExitEventArgs e)
     {
-        if (_bootstrapper == null)
-        {
-        }
-        else
-            _bootstrapper.Dispose();
+        DispatcherUnhandledException -= OnUnhandledExceptionRaised;
+        _bootstrapper?.Dispose();
 
         base.OnExit(e);
+    }
+
+    private void OnUnhandledExceptionRaised(object sender, DispatcherUnhandledExceptionEventArgs e)
+    {
+        if (_bootstrapper is null) return;
+
+        var unhandledExceptionHandler = _bootstrapper.CreateUnhandledExceptionHandler();
+        unhandledExceptionHandler.Handle(e);
     }
 }
