@@ -10,23 +10,18 @@ namespace AnchorCalc.ViewModels.MainWindow;
 public class MainWindowMenuViewModel : IMainWindowMenuViewModel
 {
     private readonly IFactory<IAboutWindowViewModel> _aboutWindowViewModelFactory;
-    private readonly IFactory<IAnchorCollectionViewModel> _anchorCollectionViewModelFactory;
     private readonly Command _closeMainWindowCommand;
     private readonly Command _openAboutWindowCommand;
-    private readonly AsyncCommand _openAnchorCollectionCommand;
     private readonly IWindowManager _windowManager;
     private IAboutWindowViewModel? _aboutWindowViewModel;
 
     public MainWindowMenuViewModel(IWindowManager windowManager,
         IFactory<IAboutWindowViewModel> aboutWindowViewModelFactory,
-        IFactory<IDevToolsMenuViewModel> devToolsMenuViewModelFactory,
-        IFactory<IAnchorCollectionViewModel> anchorCollectionViewModelFactory)
+        IFactory<IDevToolsMenuViewModel> devToolsMenuViewModelFactory)
     {
         _closeMainWindowCommand = new Command(CloseMainWindow);
         _openAboutWindowCommand = new Command(OpenAboutWindow);
-        _openAnchorCollectionCommand = new AsyncCommand(OpenAnchorCollectionAsync);
         _aboutWindowViewModelFactory = aboutWindowViewModelFactory;
-        _anchorCollectionViewModelFactory = anchorCollectionViewModelFactory;
         DevToolsMenuViewModel = devToolsMenuViewModelFactory.Create();
         _windowManager = windowManager;
         DevToolsMenuViewModel.ContentViewModelChanged += OnContentViewModelChanged;
@@ -39,7 +34,6 @@ public class MainWindowMenuViewModel : IMainWindowMenuViewModel
 
     public event Action? MainWindowClosingRequested;
     public event Action<IMainWindowContentViewModel>? ContentViewModelChanged;
-    public ICommand OpenAnchorCollectionCommand => _openAnchorCollectionCommand;
 
     public void CloseAboutWindow()
     {
@@ -51,12 +45,7 @@ public class MainWindowMenuViewModel : IMainWindowMenuViewModel
         ContentViewModelChanged?.Invoke(contentViewModel);
     }
 
-    private async Task OpenAnchorCollectionAsync()
-    {
-        var anchorCollectionViewModel = _anchorCollectionViewModelFactory.Create();
-        await anchorCollectionViewModel.InitializeAsync();
-        ContentViewModelChanged?.Invoke(anchorCollectionViewModel);
-    }
+
 
     private void CloseMainWindow()
     {

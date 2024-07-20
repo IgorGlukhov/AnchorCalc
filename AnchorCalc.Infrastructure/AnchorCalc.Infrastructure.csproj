@@ -22,7 +22,6 @@
 
   <ItemGroup>
     <Folder Include="DevTools\" />
-    <Folder Include="Rest\" />
   </ItemGroup>
 
 </Project>

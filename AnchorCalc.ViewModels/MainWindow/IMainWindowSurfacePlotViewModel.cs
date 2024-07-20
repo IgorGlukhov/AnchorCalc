@@ -2,7 +2,7 @@
 
 namespace AnchorCalc.ViewModels.MainWindow;
 
-public interface IMainWindowSurfacePlotViewModel : IDisposable
+public interface IMainWindowSurfacePlotViewModel : IMainWindowContentViewModel, IDisposable
 {
     public Point3D[,] DataPoints { get; }
     public string Title { get; set; }

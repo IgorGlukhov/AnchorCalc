@@ -34,9 +34,6 @@
             <MenuItem Header="Help">
                 <MenuItem Header="About" Command="{Binding MenuViewModel.OpenAboutWindowCommand}" />
             </MenuItem>
-            <MenuItem Header="Collections">
-                <MenuItem Header="Anchors" Command="{Binding MenuViewModel.OpenAnchorCollectionCommand}" />
-            </MenuItem>
             <MenuItem Header="DevTools"
                       Visibility="{Binding MenuViewModel.DevToolsMenuViewModel.IsVisible, 
                 Converter={x:Static converters:TrueToVisibleFalseToCollapsedConverter.Instance}}">
@@ -58,8 +55,6 @@
                 </MenuItem>
                 <MenuItem Header="Throw Exception"
                           Command="{Binding MenuViewModel.DevToolsMenuViewModel.ThrowExceptionCommand}" />
-
-
             </MenuItem>
         </Menu>
         <controls:SurfacePropertiesControl Grid.Row="1" Grid.Column="0" x:Name="SurfaceProperties"

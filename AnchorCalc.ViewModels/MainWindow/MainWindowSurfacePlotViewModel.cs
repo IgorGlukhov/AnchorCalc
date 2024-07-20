@@ -4,7 +4,9 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
+using AnchorCalc.Domain.Factories;
 using AnchorCalc.Infrastructure.Calc;
+using AnchorCalc.ViewModels.Anchors;
 using AnchorCalc.ViewModels.Commands;
 using AnchorCalc.ViewModels.Plotters;
 
@@ -32,35 +34,35 @@ public class MainWindowSurfacePlotViewModel : ViewModel, IMainWindowSurfacePlotV
     private double _concreteBaseWidth = 400;
 
     private double _concreteResistance = 18.5;
-    private double _crackedNormativeForce = 16;
-    private double _criticEdgeDistance = 150;
-    private double _criticInterAxialDistance = 300;
+    private double _crackedNormativeForce;
+    private double _criticEdgeDistance;
+    private double _criticInterAxialDistance;
 
     private Point3D[,] _dataPoints = new Point3D[1, 1];
 
-    private double _diameter = 12;
+    private double _diameter;
     private double _factBaseHeight = 250;
 
     private double _force = 10;
     private double[,] _forceDataArray = new double[1, 1];
-    private double _gammaNc = 1;
-    private double _gammaNp = 1;
-    private double _gammaNs = 1.25;
-    private double _gammaNsp = 1;
+    private double _gammaNc;
+    private double _gammaNp;
+    private double _gammaNs;
+    private double _gammaNsp;
     private bool _isCracked = true;
     private double _localDeformation = 0.0015;
-    private double _minBaseHeight = 100;
+    private double _minBaseHeight;
 
 
     private double _momentX = 3;
 
     private double _momentY = 10;
-    private double _normativeResistance = 40;
+    private double _normativeResistance;
     private StackPanel _numberAnchorStack = new();
     private StackPanel _numberCoordinatesStack = new();
-    private double _phiC = 1;
+    private double _phiC;
 
-    private double _sealingDepth = 70;
+    private double _sealingDepth;
 
     private string _title = "Напряжения в бетоне основания";
 
@@ -77,14 +79,31 @@ public class MainWindowSurfacePlotViewModel : ViewModel, IMainWindowSurfacePlotV
 
     private string _zAxisLabel = "Z";
     private double[,] _zData2DArray = new double[1, 1];
+    private readonly IAnchorCollectionViewModel _anchorCollectionViewModel;
 
-    public MainWindowSurfacePlotViewModel()
+    public MainWindowSurfacePlotViewModel(IFactory<IAnchorCollectionViewModel> anchorCollectionViewModelFactory)
     {
         _enterPropertiesCommand = new Command(EnterProperties);
         _addCoordinateContainersCommand = new Command(AddAnchorCoordinateContainers);
+        _anchorCollectionViewModel = anchorCollectionViewModelFactory.Create();
+        if (_anchorCollectionViewModel.Items != null)
+        {
+            _crackedNormativeForce = _anchorCollectionViewModel.Items[0].CrackedNormativeForce;
+            _criticEdgeDistance = _anchorCollectionViewModel.Items[0].CriticEdgeDistance;
+            _diameter = _anchorCollectionViewModel.Items[0].Diameter;
+            _gammaNc = _anchorCollectionViewModel.Items[0].GammaNc;
+            _gammaNp = _anchorCollectionViewModel.Items[0].GammaNp;
+            _gammaNs = _anchorCollectionViewModel.Items[0].GammaNs;
+            _gammaNsp = _anchorCollectionViewModel.Items[0].GammaNsp;
+            _minBaseHeight = _anchorCollectionViewModel.Items[0].MinBaseHeight;
+            _normativeResistance = _anchorCollectionViewModel.Items[0].NormativeResistance;
+            _phiC = _anchorCollectionViewModel.Items[0].PhiC;
+            _sealingDepth = _anchorCollectionViewModel.Items[0].SealingDepth;
+            _criticInterAxialDistance = _anchorCollectionViewModel.Items[0].CriticInterAxialDistance;
+        }
+
         ModelChange();
     }
-
     public StackPanel NumberCoordinatesStack
     {
         get => _numberCoordinatesStack;

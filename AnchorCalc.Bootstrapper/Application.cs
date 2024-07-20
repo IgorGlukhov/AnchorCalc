@@ -11,7 +11,7 @@ namespace AnchorCalc.Bootstrapper;
 
 internal class Application : IApplication, IDisposable
 {
-    private static readonly ILogger Logger = LogManager.GetLogger(nameof(Application));
+    private static readonly Logger Logger = LogManager.GetLogger(nameof(Application));
     private readonly ILifetimeScope _applicationLifetimeScope;
     private IMainWindowViewModel? _mainWindowViewModel;
 

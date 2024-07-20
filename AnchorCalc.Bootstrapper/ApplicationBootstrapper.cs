@@ -24,7 +24,7 @@ public class ApplicationBootstrapper : IDisposable
         _container.Resolve<ILogManagerInitializer>();
     }
 
-    private void RegisterDependencies(ContainerBuilder containerBuilder)
+    private static void RegisterDependencies(ContainerBuilder containerBuilder)
     {
         containerBuilder.RegisterType<Application>().As<IApplication>().SingleInstance();
         containerBuilder.RegisterType<PathService>().As<IPathService>().As<IPathServiceInitializer>().SingleInstance();
