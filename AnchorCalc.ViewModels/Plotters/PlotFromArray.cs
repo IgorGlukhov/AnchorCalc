@@ -10,11 +10,11 @@ public static class PlotFromArray
         var m = zData2DArray.GetLength(1);
         var newDataArray = new Point3D[n, m];
         for (var i = 0; i < n; i++)
-        for (var j = 0; j < m; j++)
-        {
-            var point = new Point3D(xData2DArray[i, j], yData2DArray[i, j], zData2DArray[i, j]);
-            newDataArray[i, j] = point;
-        }
+            for (var j = 0; j < m; j++)
+            {
+                var point = new Point3D(xData2DArray[i, j], yData2DArray[i, j], zData2DArray[i, j]);
+                newDataArray[i, j] = point;
+            }
 
         return newDataArray;
     }

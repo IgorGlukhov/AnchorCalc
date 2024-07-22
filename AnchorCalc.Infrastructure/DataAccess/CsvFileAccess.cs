@@ -3,16 +3,16 @@ using System.Data;
 
 namespace AnchorCalc.Infrastructure.DataAccess;
 
-public class CsvFileAccess:ICsvFileAccess
+public class CsvFileAccess : ICsvFileAccess
 {
-    private readonly string _baseAddress = Path.Combine(Directory.GetParent(System.IO.Directory.GetCurrentDirectory())?.Parent?.Parent?.Parent?.FullName ?? string.Empty, "AnchorData.csv");
+    private readonly string _baseAddress = Path.Combine(Directory.GetParent(System.IO.Directory.GetCurrentDirectory())?.FullName ?? string.Empty, "AnchorData.csv");
 
     public CsvFileAccess()
     {
         Data = ConvertCsvToDataTable();
     }
 
-    public DataTable Data { get;}
+    public DataTable Data { get; }
 
     public DataTable ConvertCsvToDataTable()
     {

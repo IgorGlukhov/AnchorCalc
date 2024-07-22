@@ -2,7 +2,6 @@
 using AnchorCalc.Domain.Factories;
 using AnchorCalc.Views.Factories;
 using Autofac;
-using Microsoft.Extensions.DependencyInjection;
 using WindowFactory = AnchorCalc.Views.Factories.WindowFactory;
 
 namespace AnchorCalc.Bootstrapper;

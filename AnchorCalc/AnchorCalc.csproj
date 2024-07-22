@@ -7,10 +7,30 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>AC.ico</ApplicationIcon>
+    <Configurations>Debug;Release;AnchorCalc</Configurations>
+    <Platforms>AnyCPU;x64</Platforms>
+    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+    <Title>AnchorCalc</Title>
+    <Company>GazpromProject</Company>
+    <Description>Приложение для расчета анкеров</Description>
+    <Copyright>©Igor Gluhov, 2024</Copyright>
+    <PackageIcon>AC.ico</PackageIcon>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/IgorGlukhov/AnchorCalc</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/IgorGlukhov/AnchorCalc</PackageProjectUrl>
+    <PackageTags>anchor wpf</PackageTags>
+    <NeutralLanguage>ru</NeutralLanguage>
   </PropertyGroup>
 
   <ItemGroup>
     <Content Include="AC.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\AC.ico">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
   <ItemGroup>

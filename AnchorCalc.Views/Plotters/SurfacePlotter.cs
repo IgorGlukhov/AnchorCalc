@@ -1,7 +1,7 @@
-﻿using System.Windows;
+﻿using HelixToolkit.Wpf;
+using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
-using HelixToolkit.Wpf;
 
 namespace AnchorCalc.Views.Plotters;
 
@@ -80,18 +80,18 @@ public class SurfacePlotter : ModelVisual3D
         var minZ = double.MaxValue;
         var maxZ = double.MinValue;
         for (var i = 0; i < numberOfRows; i++)
-        for (var j = 0; j < numberOfColumns; j++)
-        {
-            var x = DataPoints[i, j].X;
-            var y = DataPoints[i, j].Y;
-            var z = DataPoints[i, j].Z;
-            maxX = Math.Max(maxX, x);
-            maxY = Math.Max(maxY, y);
-            maxZ = Math.Max(maxZ, z);
-            minX = Math.Min(minX, x);
-            minY = Math.Min(minY, y);
-            minZ = Math.Min(minZ, z);
-        }
+            for (var j = 0; j < numberOfColumns; j++)
+            {
+                var x = DataPoints[i, j].X;
+                var y = DataPoints[i, j].Y;
+                var z = DataPoints[i, j].Z;
+                maxX = Math.Max(maxX, x);
+                maxY = Math.Max(maxY, y);
+                maxZ = Math.Max(maxZ, z);
+                minX = Math.Min(minX, x);
+                minY = Math.Min(minY, y);
+                minZ = Math.Min(minZ, z);
+            }
 
         if (maxX == minX) maxX += 0.01;
         if (maxZ == minZ) maxZ += 0.01;
@@ -105,11 +105,11 @@ public class SurfacePlotter : ModelVisual3D
         // Привязываем цвет текстур к значению по z
         var textureCoordinates = new Point[numberOfRows, numberOfColumns];
         for (var i = 0; i < numberOfRows; i++)
-        for (var j = 0; j < numberOfColumns; j++)
-        {
-            var tc = (DataPoints[i, j].Z - minZ) / (maxZ - minZ);
-            textureCoordinates[i, j] = new Point(tc, tc);
-        }
+            for (var j = 0; j < numberOfColumns; j++)
+            {
+                var tc = (DataPoints[i, j].Z - minZ) / (maxZ - minZ);
+                textureCoordinates[i, j] = new Point(tc, tc);
+            }
 
         var surfaceModelBuilder = new MeshBuilder();
         surfaceModelBuilder.AddRectangularMesh(DataPoints, textureCoordinates);

@@ -1,6 +1,6 @@
-﻿using System.Windows;
+﻿using AnchorCalc.Bootstrapper;
+using System.Windows;
 using System.Windows.Threading;
-using AnchorCalc.Bootstrapper;
 
 namespace AnchorCalc;
 

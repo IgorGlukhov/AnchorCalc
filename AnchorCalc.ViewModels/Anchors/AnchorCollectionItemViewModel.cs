@@ -1,6 +1,4 @@
-﻿using System.Globalization;
-
-namespace AnchorCalc.ViewModels.Anchors;
+﻿namespace AnchorCalc.ViewModels.Anchors;
 
 public class AnchorCollectionItemViewModel()
 {
@@ -18,5 +16,5 @@ public class AnchorCollectionItemViewModel()
     public required double SealingDepth { get; init; }
     public required double Diameter { get; init; }
     public required string Id { get; init; }
-    public required string Name { get; init; } 
+    public required string Name { get; init; }
 }

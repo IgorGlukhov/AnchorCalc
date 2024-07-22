@@ -1,5 +1,4 @@
 ﻿using AnchorCalc.Domain.DataAccess;
-using System.Collections.Generic;
 
 namespace AnchorCalc.ViewModels.Anchors;
 

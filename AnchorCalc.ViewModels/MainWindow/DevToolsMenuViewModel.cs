@@ -1,9 +1,9 @@
-﻿using System.Windows.Input;
-using AnchorCalc.Domain.DevTools;
+﻿using AnchorCalc.Domain.DevTools;
 using AnchorCalc.Domain.Factories;
 using AnchorCalc.ViewModels.Commands;
 using AnchorCalc.ViewModels.DevTools;
 using NLog;
+using System.Windows.Input;
 
 namespace AnchorCalc.ViewModels.MainWindow;
 

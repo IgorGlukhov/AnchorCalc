@@ -1,11 +1,11 @@
-﻿using System.Windows;
-using AnchorCalc.Domain.Factories;
+﻿using AnchorCalc.Domain.Factories;
 using AnchorCalc.Infrastructure.Settings;
 using AnchorCalc.ViewModels.DevTools;
 using AnchorCalc.ViewModels.MainWindow;
 using AnchorCalc.ViewModels.Windows;
 using Autofac;
 using NLog;
+using System.Windows;
 
 namespace AnchorCalc.Bootstrapper;
 

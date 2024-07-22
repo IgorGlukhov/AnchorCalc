@@ -1,14 +1,15 @@
-﻿using System.Globalization;
+﻿using AnchorCalc.Domain.Factories;
+using AnchorCalc.Infrastructure.Calc;
+using AnchorCalc.ViewModels.Anchors;
+using AnchorCalc.ViewModels.Commands;
+using AnchorCalc.ViewModels.Plotters;
+using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
-using AnchorCalc.Domain.Factories;
-using AnchorCalc.Infrastructure.Calc;
-using AnchorCalc.ViewModels.Anchors;
-using AnchorCalc.ViewModels.Commands;
-using AnchorCalc.ViewModels.Plotters;
 
 namespace AnchorCalc.ViewModels.MainWindow;
 
@@ -16,6 +17,7 @@ public class MainWindowSurfacePlotViewModel : ViewModel, IMainWindowSurfacePlotV
 {
     private readonly Command _addCoordinateContainersCommand;
     private readonly Command _enterPropertiesCommand;
+    private readonly Command _insertTargetAnchorPropertiesCommand;
     private readonly List<TextBox> _listTextBoxX = [];
     private readonly List<TextBox> _listTextBoxY = [];
     private double[,] _anchorCoordinatesX = { { -0.110, -0.110, 0.110, 0.110 } };
@@ -80,29 +82,78 @@ public class MainWindowSurfacePlotViewModel : ViewModel, IMainWindowSurfacePlotV
     private string _zAxisLabel = "Z";
     private double[,] _zData2DArray = new double[1, 1];
     private readonly IAnchorCollectionViewModel _anchorCollectionViewModel;
-
+    private int _targetAnchorID = 0;
+    private string _targetAnchorName = String.Empty;
+    private ObservableCollection<string> _anchorNames = [];
+    private ObservableCollection<bool> _bools = [true, false];
     public MainWindowSurfacePlotViewModel(IFactory<IAnchorCollectionViewModel> anchorCollectionViewModelFactory)
     {
         _enterPropertiesCommand = new Command(EnterProperties);
         _addCoordinateContainersCommand = new Command(AddAnchorCoordinateContainers);
+        _insertTargetAnchorPropertiesCommand = new Command(InsertTargetAnchorProperties);
         _anchorCollectionViewModel = anchorCollectionViewModelFactory.Create();
-        if (_anchorCollectionViewModel.Items != null)
+        foreach (var item in _anchorCollectionViewModel.Items)
         {
-            _crackedNormativeForce = _anchorCollectionViewModel.Items[0].CrackedNormativeForce;
-            _criticEdgeDistance = _anchorCollectionViewModel.Items[0].CriticEdgeDistance;
-            _diameter = _anchorCollectionViewModel.Items[0].Diameter;
-            _gammaNc = _anchorCollectionViewModel.Items[0].GammaNc;
-            _gammaNp = _anchorCollectionViewModel.Items[0].GammaNp;
-            _gammaNs = _anchorCollectionViewModel.Items[0].GammaNs;
-            _gammaNsp = _anchorCollectionViewModel.Items[0].GammaNsp;
-            _minBaseHeight = _anchorCollectionViewModel.Items[0].MinBaseHeight;
-            _normativeResistance = _anchorCollectionViewModel.Items[0].NormativeResistance;
-            _phiC = _anchorCollectionViewModel.Items[0].PhiC;
-            _sealingDepth = _anchorCollectionViewModel.Items[0].SealingDepth;
-            _criticInterAxialDistance = _anchorCollectionViewModel.Items[0].CriticInterAxialDistance;
+            AnchorNames.Add(item.Name);
         }
-
+        InsertTargetAnchorProperties();
         ModelChange();
+    }
+
+    private void InsertTargetAnchorProperties()
+    {
+        if (_anchorCollectionViewModel != null)
+        {
+            TargetAnchorName = _anchorCollectionViewModel.Items[TargetAnchorID].Name;
+            CrackedNormativeForce = _anchorCollectionViewModel.Items[TargetAnchorID].CrackedNormativeForce;
+            CriticEdgeDistance = _anchorCollectionViewModel.Items[TargetAnchorID].CriticEdgeDistance;
+            Diameter = _anchorCollectionViewModel.Items[TargetAnchorID].Diameter;
+            GammaNc = _anchorCollectionViewModel.Items[TargetAnchorID].GammaNc;
+            GammaNp = _anchorCollectionViewModel.Items[TargetAnchorID].GammaNp;
+            GammaNs = _anchorCollectionViewModel.Items[TargetAnchorID].GammaNs;
+            GammaNsp = _anchorCollectionViewModel.Items[TargetAnchorID].GammaNsp;
+            MinBaseHeight = _anchorCollectionViewModel.Items[TargetAnchorID].MinBaseHeight;
+            NormativeResistance = _anchorCollectionViewModel.Items[TargetAnchorID].NormativeResistance;
+            PhiC = _anchorCollectionViewModel.Items[TargetAnchorID].PhiC;
+            SealingDepth = _anchorCollectionViewModel.Items[TargetAnchorID].SealingDepth;
+            CriticInterAxialDistance = _anchorCollectionViewModel.Items[TargetAnchorID].CriticInterAxialDistance;
+        }
+    }
+    public ObservableCollection<string> AnchorNames
+    {
+        get => _anchorNames;
+        private set
+        {
+            _anchorNames = value;
+            OnPropertyChanged();
+        }
+    }
+    public ObservableCollection<bool> Bools
+    {
+        get => _bools;
+        private set
+        {
+            _bools = value;
+            OnPropertyChanged();
+        }
+    }
+    public string TargetAnchorName
+    {
+        get => _targetAnchorName;
+        set
+        {
+            _targetAnchorName = value;
+            OnPropertyChanged();
+        }
+    }
+    public int TargetAnchorID
+    {
+        get => _targetAnchorID;
+        set
+        {
+            _targetAnchorID = value;
+            OnPropertyChanged();
+        }
     }
     public StackPanel NumberCoordinatesStack
     {
@@ -156,6 +207,7 @@ public class MainWindowSurfacePlotViewModel : ViewModel, IMainWindowSurfacePlotV
 
     public ICommand EnterPropertiesCommand => _enterPropertiesCommand;
     public ICommand AddCoordinateContainersCommand => _addCoordinateContainersCommand;
+    public ICommand InsertTargetAnchorPropertiesCommand => _insertTargetAnchorPropertiesCommand;
 
 
     public double[,] ForceDataArray

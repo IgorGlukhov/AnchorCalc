@@ -1,7 +1,7 @@
-﻿using System.Globalization;
+﻿using AnchorCalc.Domain.Logging;
+using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media;
-using AnchorCalc.Domain.Logging;
 
 namespace AnchorCalc.Views.DevTools;
 

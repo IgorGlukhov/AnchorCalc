@@ -1,5 +1,5 @@
-﻿using System.Windows.Threading;
-using NLog;
+﻿using NLog;
+using System.Windows.Threading;
 
 namespace AnchorCalc.Bootstrapper.Logging;
 

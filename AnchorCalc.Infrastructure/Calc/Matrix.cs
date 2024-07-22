@@ -48,8 +48,8 @@ public class Matrix(double[,] matrix) : IEnumerable
         var result = new double[matrix.Rows, matrix.Columns];
 
         for (var r = 0; r < matrix.Rows; r++)
-        for (var c = 0; c < matrix.Columns; c++)
-            result[r, c] = matrix._matrix[r, c] / divider._matrix[r, c];
+            for (var c = 0; c < matrix.Columns; c++)
+                result[r, c] = matrix._matrix[r, c] / divider._matrix[r, c];
         return result;
     }
 
@@ -58,8 +58,8 @@ public class Matrix(double[,] matrix) : IEnumerable
         var result = new double[matrix.Rows, matrix.Columns];
 
         for (var r = 0; r < matrix.Rows; r++)
-        for (var c = 0; c < matrix.Columns; c++)
-            result[r, c] = matrix._matrix[r, c] / divider;
+            for (var c = 0; c < matrix.Columns; c++)
+                result[r, c] = matrix._matrix[r, c] / divider;
         return result;
     }
 
@@ -68,8 +68,8 @@ public class Matrix(double[,] matrix) : IEnumerable
         var result = new double[matrix.Rows, matrix.Columns];
 
         for (var r = 0; r < matrix.Rows; r++)
-        for (var c = 0; c < matrix.Columns; c++)
-            result[r, c] = matrix._matrix[r, c] + folder;
+            for (var c = 0; c < matrix.Columns; c++)
+                result[r, c] = matrix._matrix[r, c] + folder;
         return result;
     }
 
@@ -78,8 +78,8 @@ public class Matrix(double[,] matrix) : IEnumerable
         var result = new double[matrix.Rows, matrix.Columns];
 
         for (var r = 0; r < matrix.Rows; r++)
-        for (var c = 0; c < matrix.Columns; c++)
-            result[r, c] = matrix._matrix[r, c] + folder._matrix[r, c];
+            for (var c = 0; c < matrix.Columns; c++)
+                result[r, c] = matrix._matrix[r, c] + folder._matrix[r, c];
         return result;
     }
 
@@ -88,8 +88,8 @@ public class Matrix(double[,] matrix) : IEnumerable
         var result = new double[matrix.Rows, matrix.Columns];
 
         for (var r = 0; r < matrix.Rows; r++)
-        for (var c = 0; c < matrix.Columns; c++)
-            result[r, c] = matrix._matrix[r, c] - differ._matrix[r, c];
+            for (var c = 0; c < matrix.Columns; c++)
+                result[r, c] = matrix._matrix[r, c] - differ._matrix[r, c];
         return result;
     }
 
@@ -99,8 +99,8 @@ public class Matrix(double[,] matrix) : IEnumerable
         var result = new double[matrix.Rows, matrix.Columns];
 
         for (var r = 0; r < matrix.Rows; r++)
-        for (var c = 0; c < matrix.Columns; c++)
-            result[r, c] = matrix._matrix[r, c] * multiplier._matrix[r, c];
+            for (var c = 0; c < matrix.Columns; c++)
+                result[r, c] = matrix._matrix[r, c] * multiplier._matrix[r, c];
         return result;
     }
 
@@ -109,8 +109,8 @@ public class Matrix(double[,] matrix) : IEnumerable
         var result = new double[matrix.Rows, matrix.Columns];
 
         for (var r = 0; r < matrix.Rows; r++)
-        for (var c = 0; c < matrix.Columns; c++)
-            result[r, c] = matrix._matrix[r, c] * multiplier;
+            for (var c = 0; c < matrix.Columns; c++)
+                result[r, c] = matrix._matrix[r, c] * multiplier;
         return result;
     }
 
@@ -119,8 +119,8 @@ public class Matrix(double[,] matrix) : IEnumerable
         var result = new double[Columns, Rows];
 
         for (var c = 0; c < Columns; c++)
-        for (var r = 0; r < Rows; r++)
-            result[c, r] = _matrix[r, c];
+            for (var r = 0; r < Rows; r++)
+                result[c, r] = _matrix[r, c];
 
         return result;
     }
@@ -129,9 +129,9 @@ public class Matrix(double[,] matrix) : IEnumerable
     {
         double result = 0;
         for (var r = 0; r < Rows; r++)
-        for (var c = 0; c < Columns; c++)
-            if (Math.Abs(_matrix[r, c]) > result)
-                result = Math.Abs(_matrix[r, c]);
+            for (var c = 0; c < Columns; c++)
+                if (Math.Abs(_matrix[r, c]) > result)
+                    result = Math.Abs(_matrix[r, c]);
 
         return result;
     }
@@ -141,8 +141,8 @@ public class Matrix(double[,] matrix) : IEnumerable
         var result = new double[Rows, Columns];
 
         for (var r = 0; r < Rows; r++)
-        for (var c = 0; c < Columns; c++)
-            result[r, c] = Math.Abs(_matrix[r, c]);
+            for (var c = 0; c < Columns; c++)
+                result[r, c] = Math.Abs(_matrix[r, c]);
 
         return result;
     }
@@ -152,8 +152,8 @@ public class Matrix(double[,] matrix) : IEnumerable
         var result = new double[Rows, 1];
 
         for (var r = 0; r < Rows; r++)
-        for (var c = 0; c < Columns; c++)
-            result[r, 0] += _matrix[r, c] * rightMatrix[c, 0];
+            for (var c = 0; c < Columns; c++)
+                result[r, 0] += _matrix[r, c] * rightMatrix[c, 0];
 
         return result;
     }
@@ -162,8 +162,8 @@ public class Matrix(double[,] matrix) : IEnumerable
     {
         var result = new double[Rows];
         for (var r = 0; r < Rows; r++)
-        for (var c = 0; c < Columns; c++)
-            result[r] += _matrix[r, c];
+            for (var c = 0; c < Columns; c++)
+                result[r] += _matrix[r, c];
 
         return result;
     }
@@ -176,8 +176,8 @@ public class Matrix(double[,] matrix) : IEnumerable
             throw new ArgumentException("Определитель матрицы равен нулю.");
         var result = Addition().Transpose();
         for (var r = 0; r < Rows; r++)
-        for (var c = 0; c < Columns; c++)
-            result._matrix[r, c] /= determinant;
+            for (var c = 0; c < Columns; c++)
+                result._matrix[r, c] /= determinant;
         return result;
     }
 
@@ -224,12 +224,12 @@ public class Matrix(double[,] matrix) : IEnumerable
         var addition = new double[Rows, Columns];
         var minor = -1;
         for (var r = 0; r < Rows; r++)
-        for (var c = 0; c < Columns; c++)
-        {
-            // Вычисляем определитель для каждого элемента матрицы дополнений
-            minor = -minor;
-            addition[r, c] = SubDeterminant(r, c) * minor;
-        }
+            for (var c = 0; c < Columns; c++)
+            {
+                // Вычисляем определитель для каждого элемента матрицы дополнений
+                minor = -minor;
+                addition[r, c] = SubDeterminant(r, c) * minor;
+            }
 
         return addition;
     }

@@ -1,6 +1,6 @@
-﻿using System.ComponentModel;
-using AnchorCalc.ViewModels.Windows;
+﻿using AnchorCalc.ViewModels.Windows;
 using AnchorCalc.Views.Factories;
+using System.ComponentModel;
 
 namespace AnchorCalc.Views.Windows;
 
